@@ -1,21 +1,31 @@
 /**
- * Main app entrance
+ * Main server app entrance
  */
 
-import express from 'express'
-
-// Http server port
-const serverPort: number = 8000
+import express, { Express } from 'express'
+import * as serverConfig from './configs/server'
+import middlewares from './middlewares'
+import router from './router'
+import { serverErrorHandler } from './serverError'
 
 // Create Express app
-const app = express()
+const app: Express = express()
+
+// Register middlewares
+app.use(middlewares)
+
+// Register main router
+app.use(router)
 
 app.get('/', (req, res) => {
   res.send('Hello World!<br>From Express with Typescript.')
 })
 
+// Register internal server error
+app.use(serverErrorHandler())
+
 // Start http server
-app.listen(serverPort, () => {
+app.listen(serverConfig.port, () => {
   console.clear()
-  console.log(`Server is running at http://localhost:${serverPort}\n`)
+  console.log(`\nServer is running at http://localhost:${serverConfig.port}\n`)
 })

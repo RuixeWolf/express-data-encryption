@@ -1,15 +1,15 @@
 /**
- * Main router list
+ * App router
  */
 
 import { Router } from 'express'
 
 // Import app's router
-import apiAppRouter from './apps/api/router'
+import userAppRouter from './apps/user/router'
 
 const router: Router = Router()
 
 // Route request to app's router
-router.use('/api', apiAppRouter)
+router.use('/user', userAppRouter)
 
 export default router
