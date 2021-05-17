@@ -2,7 +2,7 @@
  * Server error middleware view
  */
 
-import { ResBody } from '../interfaces/resBody'
+import { ResBody } from '@interfaces/resBody'
 
 /**
  * Get default internal server error response data

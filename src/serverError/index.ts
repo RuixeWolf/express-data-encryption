@@ -4,7 +4,7 @@
 
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express'
 import * as view from './view'
-import { ResBody } from '../interfaces/resBody'
+import { ResBody } from '@interfaces/resBody'
 
 /**
  * Default internal server error handler

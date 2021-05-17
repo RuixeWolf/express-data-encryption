@@ -164,5 +164,6 @@ export function register(): RequestHandler {
     // Default case
     const defaultResData: UserRegisterRes = view.getUserRegResData()
     res.json(defaultResData)
+    return
   }
 }

@@ -2,7 +2,7 @@
  * App interface
  */
 
-import { ResBody } from '../../../../interfaces/resBody'
+import { ResBody } from '@interfaces/resBody'
 
 /**
  * User information MongoDB document
@@ -43,5 +43,5 @@ export interface UserRegisterReq {
  * User register response data
  */
 export interface UserRegisterRes extends ResBody {
-  data: UserInfoDoc
+  data: UserInfoDoc | any
 }
