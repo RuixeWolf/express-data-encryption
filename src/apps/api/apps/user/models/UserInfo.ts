@@ -33,7 +33,7 @@ const UserInfoSchema: Schema = new Schema({
   registerTime: {
     type: Date
   },
-  modifyTime: {
+  modifiedTime: {
     type: Date,
     default: Date.now
   }

@@ -1,5 +1,5 @@
 /**
- * HPPT server config
+ * HTTP server configs
  */
 
 // Server port

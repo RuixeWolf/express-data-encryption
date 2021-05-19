@@ -11,11 +11,11 @@ import { ResBody } from '@interfaces/resBody'
   userId: string
   userAccount: string
   userName: string
-  nickName: string
-  avatar: string
-  email: string
-  phone: string
-  modifyTime: string
+  nickName: string | null
+  avatar: string | null
+  email: string | null
+  phone: string | null
+  modifiedTime: string
   registerTime?: string
 }
 

@@ -17,14 +17,27 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "crypto-js": "^4.0.0",
     "express": "^4.17.1",
-    "mongoose": "^5.12.8"
+    "module-alias": "^2.2.2",
+    "mongoose": "^5.12.10",
+    "node-rsa": "^1.1.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.0.1",
     "@types/express": "^4.17.11",
+    "@types/module-alias": "^2.0.0",
     "@types/node": "^15.0.3",
+    "@types/node-rsa": "^1.1.0",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
+  },
+  "_moduleAliases": {
+    "@": "./src",
+    "@apps": "./src/apps",
+    "@utils": "./src/utils",
+    "@configs": "./src/configs",
+    "@interfaces": "./src/interfaces"
   }
 }
