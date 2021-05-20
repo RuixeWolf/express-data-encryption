@@ -46,7 +46,13 @@ export function register(): RequestHandler {
     /** 解密数据 */
 
     // 解密密码
-    reqData.password = rsaDecrypt(reqData.password)
+    try {
+      reqData.password = rsaDecrypt(reqData.password)
+    } catch (error) {
+      const resData: UserRegisterRes = view.getUserRegResData(4)
+      res.json(resData)
+      return
+    }
 
     /** 验证数据有效性 */
 

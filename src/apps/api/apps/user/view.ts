@@ -10,8 +10,8 @@ import { UserRegisterRes, UserInfoDoc } from './interface'
  * @param {number} [statusCode=0] - Register status code
  * + 1: 注册成功
  * + 2: 用户名无效
- * + 3: 密码无效
- * + 4: 用户名已被占用
+ * + 3: 用户名已被占用
+ * + 4: 密码无效
  * + 5: 邮箱无效
  * + 6: 手机号无效
  * @param {(UserInfoDoc|any)} [data={}] - User info
