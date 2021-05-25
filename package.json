@@ -38,6 +38,8 @@
     "@apps": "./src/apps",
     "@utils": "./src/utils",
     "@configs": "./src/configs",
-    "@interfaces": "./src/interfaces"
+    "@interfaces": "./src/interfaces",
+    "@privateMiddlewares": "./src/privateMiddlewares",
+    "@models": "./src/models"
   }
 }

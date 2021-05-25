@@ -2,7 +2,19 @@
  * UserPassword model
  */
 
-import { Schema, model, Model } from 'mongoose'
+import { connect, Schema, Model, model } from 'mongoose'
+import mongodbUrl from '@configs/mongodb'
+
+// Connect to MongoDB
+connect(
+  mongodbUrl,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+).catch(err => {
+  throw err
+})
 
 // Create user password schema
 const UserPasswordSchema: Schema = new Schema({

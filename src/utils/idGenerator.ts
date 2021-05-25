@@ -4,7 +4,7 @@
 
 /**
  * Generate ID
- * @param {string} [prefix=''] - ID prefix
+ * @param {string} [prefix = ''] - ID prefix
  * @returns {string} Prefix with 20-bit hex string
  */
 export function generateId(prefix?: string): string {
@@ -21,7 +21,7 @@ export function generateId(prefix?: string): string {
 
 /**
  * Generate account number string
- * @param {number} [length=10] - Account number length
+ * @param {number} [length = 10] - Account number length
  * @returns {string} Account number string
  */
 export function generateAccount(length?: number): string {

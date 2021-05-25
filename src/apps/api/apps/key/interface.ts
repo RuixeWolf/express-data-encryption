@@ -7,8 +7,8 @@ import { ResBody } from '@interfaces/resBody'
 /**
  * Get key response
  */
-export interface GetKeyRes extends ResBody {
+export interface GetPubKeyRes extends ResBody {
   data: {
-    key: string
+    pubKey: string
   }
 }

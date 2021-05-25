@@ -4,15 +4,19 @@
 
 import { RequestHandler, Request, Response } from 'express'
 import * as view from './view'
-import { GetKeyRes } from './interface'
+import { GetPubKeyRes } from './interface'
+import { getPublicKey } from '@utils/rsaEncrypt'
 
 /**
  * Get RSA public key API controller
  * @returns {RequestHandler} Express request handler
  */
-export function getKey(): RequestHandler {
+export function getPubKey(): RequestHandler {
   return (req: Request, res: Response) => {
-    const resData: GetKeyRes = view.getRsaPubKey()
+    // Get RSA public key
+    const rsaPubKey: string = getPublicKey()
+    // Get response data
+    const resData: GetPubKeyRes = view.getRsaPubKeyRes(rsaPubKey)
     res.json(resData)
   }
 }

@@ -2,34 +2,31 @@
  * App view
  */
 
-import { getPublicKey } from '@utils/rsaEncrypt'
-import { GetKeyRes } from './interface'
+import { GetPubKeyRes } from './interface'
 
 /**
- * Get RSA public key
- * @returns {GetKeyRes} RSA public key
+ * Get RSA public key response data
+ * @param {string} rsaPubKey - RSA public key
+ * @returns {GetKeyRes} RSA public key response data
  */
-export function getRsaPubKey(): GetKeyRes {
+export function getRsaPubKeyRes(rsaPubKey: string): GetPubKeyRes {
   // Init default response data
-  let getKeyRes: GetKeyRes = {
+  let getPubKeyRes: GetPubKeyRes = {
     msg: 'fail',
     success: false,
     statusCode: 0,
     data: {
-      key: ''
+      pubKey: ''
     }
   }
 
-  // Get RSA public key
-  const rsaPubKey: string = getPublicKey()
-
   if (rsaPubKey) {
-    getKeyRes.msg = 'success'
-    getKeyRes.success = true
-    getKeyRes.statusCode = 1
-    getKeyRes.data.key = rsaPubKey
-    return getKeyRes
+    getPubKeyRes.msg = 'success'
+    getPubKeyRes.success = true
+    getPubKeyRes.statusCode = 1
+    getPubKeyRes.data.pubKey = rsaPubKey
+    return getPubKeyRes
   }
   
-  return getKeyRes
+  return getPubKeyRes
 }

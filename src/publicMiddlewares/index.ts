@@ -9,7 +9,7 @@ import bodyParser from './bodyParser'
 
 const app: Express = epxress()
 
-// Register middlewares
+// Register public middlewares
 app.use(bodyParser)
 
 export default app

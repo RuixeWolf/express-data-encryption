@@ -7,7 +7,7 @@ require('module-alias/register')
 
 import express, { Express } from 'express'
 import * as serverConfig from './configs/server'
-import middlewares from './middlewares'
+import middlewares from './publicMiddlewares'
 import staticFiles from './static'
 import router from './router'
 import { serverErrorHandler } from './serverError'
@@ -15,7 +15,7 @@ import { serverErrorHandler } from './serverError'
 // Create Express app
 const app: Express = express()
 
-// Register middlewares
+// Register public middlewares
 app.use(middlewares)
 
 // Register static files
