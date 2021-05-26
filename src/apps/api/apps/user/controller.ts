@@ -473,12 +473,22 @@ export function editInfo(): SessionRequestHandler {
     // 生成需要更新的数据
     const currentTime: Date = new Date()
     const modifiedTime: string = currentTime.toISOString()
-    const userInfoUpdateData: EditUserInfoFields = {
-      nickName: reqData.nickName || null,
-      avatar: reqData.avatar || null,
-      email: reqData.email || null,
-      phone: reqData.phone || null,
+    let userInfoUpdateData: EditUserInfoFields = {
       modifiedTime
+    }
+
+    // 添加需要修改的字段
+    if (reqData.nickName !== undefined) {
+      userInfoUpdateData.nickName = reqData.nickName || null
+    }
+    if (reqData.avatar !== undefined) {
+      userInfoUpdateData.avatar = reqData.avatar || null
+    }
+    if (reqData.email !== undefined) {
+      userInfoUpdateData.email = reqData.email || null
+    }
+    if (reqData.phone !== undefined) {
+      userInfoUpdateData.phone = reqData.phone || null
     }
 
     // 更新用户信息

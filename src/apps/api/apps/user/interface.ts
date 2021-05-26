@@ -104,10 +104,10 @@ export interface EditUserInfoReq {
  * User information fields that can be edited
  */
 export interface EditUserInfoFields {
-  nickName: string | null
-  avatar: string | null
-  email: string | null
-  phone: string | null,
+  nickName?: string | null
+  avatar?: string | null
+  email?: string | null
+  phone?: string | null,
   modifiedTime: string
 }
 

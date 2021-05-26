@@ -219,7 +219,7 @@ export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoR
   switch (statusCode) {
     case 1:
       // 修改用户信息成功
-      resData.msg = '已更改用户信息'
+      resData.msg = '用户信息已更改'
       resData.success = true
       return resData
 
@@ -265,7 +265,7 @@ export function getModifyUserPaswdResData(statusCode?: number): ModifyUserPaswdR
   switch (statusCode) {
     case 1:
       // 密码修改成功
-      resData.msg = '密码已修改'
+      resData.msg = '密码已更改'
       resData.success = true
       return resData
     

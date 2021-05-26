@@ -92,6 +92,7 @@
         <label for="originalText">原文</label>
         <button onclick="encryptAndCopy()">加密原文并复制密文</button>
         <button onclick="encryptClipboardAndCopy()">从剪切板导入原文加密并复制密文</button>
+        <button onclick="copyInput('#originalText')">复制</button>
         <button onclick="clearInput('#originalText')">清空</button>
       </div>
       <textarea id="originalText" class="ta-text" placeholder="输入或导入原文"></textarea>
@@ -101,6 +102,7 @@
         <label for="cipherText">密文</label>
         <button onclick="decryptAndCopy()">解密密文并复制原文</button>
         <button onclick="decryptClipboardAndCopy()">从剪切板导入密文解密并复制原文</button>
+        <button onclick="copyInput('#cipherText')">复制</button>
         <button onclick="clearInput('#cipherText')">清空</button>
       </div>
       <textarea id="cipherText" class="ta-text" placeholder="输入或导入密文"></textarea>
@@ -244,6 +246,13 @@
       await importTextFromClipboard('#cipherText')
       await decryptAndCopy()
     }
+
+    // 复制输入框内容
+    async function copyInput(targetEleSelector) {
+      const content = $(targetEleSelector).val()
+      if (content) await setClipboardText(content)
+    }
+
   </script>
 </body>
 </html>
