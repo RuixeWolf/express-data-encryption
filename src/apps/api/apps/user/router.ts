@@ -51,4 +51,14 @@ router.get(
   controller.editInfo() as RequestHandler
 )
 
+/**
+ * $route POST /api/user/modifypassword
+ * @access private
+ */
+ router.post(
+  '/modifypassword',
+  verifySession() as RequestHandler,
+  controller.modifyPassword() as RequestHandler
+)
+
 export default router

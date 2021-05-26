@@ -2,11 +2,11 @@
  * UserInfo model
  */
 
-import { connect, Schema, Model, model } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 
 // Connect to MongoDB
-connect(
+mongoose.connect(
   mongodbUrl,
   {
     useNewUrlParser: true,
@@ -52,6 +52,6 @@ const UserInfoSchema: Schema = new Schema({
 })
 
 // Create user info model
-const UserInfoModel: Model<any, any, any> = model('UserInfo', UserInfoSchema)
+const UserInfoModel: Model<any, any, any> = mongoose.model('UserInfo', UserInfoSchema)
 
 export default UserInfoModel

@@ -11,7 +11,8 @@ import {
   GetUserInfoResData,
   UserLogoutRes,
   EditUserInfoResData,
-  EditUserInfoRes
+  EditUserInfoRes,
+  ModifyUserPaswdRes
 } from './interface'
 
 /**
@@ -75,6 +76,7 @@ export function getUserRegResData(statusCode?: number, data?: UserInfoDoc | any)
       
     default:
       userRegResData.msg = '注册失败'
+      userRegResData.statusCode = 0
       return userRegResData
   }
 }
@@ -112,6 +114,7 @@ export function getUserLoginResData(statusCode?: number, data?: any): UserLoginR
 
     default:
       userLoginResData.msg = '登录失败'
+      userLoginResData.statusCode = 0
       return userLoginResData
   }
 }
@@ -149,6 +152,7 @@ export function getUserInfoResData(statusCode?: number, data?: GetUserInfoResDat
 
     default:
       resData.msg = 'fail'
+      resData.statusCode = 0
       return resData
   }
 }
@@ -186,6 +190,7 @@ export function getUserLogoutResData(statusCode?: number, data?: any): UserLogou
 
     default:
       resData.msg = 'fail'
+      resData.statusCode = 0
       return resData
   }
 }
@@ -213,8 +218,8 @@ export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoR
 
   switch (statusCode) {
     case 1:
-      // 获取用户信息成功
-      resData.msg = 'success'
+      // 修改用户信息成功
+      resData.msg = '已更改用户信息'
       resData.success = true
       return resData
 
@@ -235,6 +240,48 @@ export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoR
 
     default:
       resData.msg = 'fail'
+      resData.statusCode = 0
+      return resData
+  }
+}
+
+/**
+ * Get modify user password response data
+ * @param {number} [statusCode = 0] - Modify user password status code
+ * + 1: 密码修改成功
+ * + 2: 用户不存在或旧密码无效
+ * + 3: 新密码无效
+ * @returns {ModifyUserPaswdRes} Modify user password response data
+ */
+export function getModifyUserPaswdResData(statusCode?: number): ModifyUserPaswdRes {
+  statusCode = statusCode || 0
+
+  let resData: ModifyUserPaswdRes = {
+    msg: '',
+    success: false,
+    statusCode
+  }
+
+  switch (statusCode) {
+    case 1:
+      // 密码修改成功
+      resData.msg = '密码已修改'
+      resData.success = true
+      return resData
+    
+    case 2:
+      // 用户不存在
+      resData.msg = '用户不存在或旧密码不正确'
+      return resData
+    
+    case 3:
+      // 新密码无效
+      resData.msg = '新密码无效'
+      return resData
+
+    default:
+      resData.msg = 'fail'
+      resData.statusCode = 0
       return resData
   }
 }

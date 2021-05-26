@@ -122,3 +122,17 @@ export interface EditUserInfoResData
  */
 export interface EditUserInfoRes
   extends GetUserInfoRes {}
+
+/**
+ * Modify user password request
+ */
+export interface ModifyUserPaswdReq {
+  oldPassword: string
+  newPassword: string
+}
+
+/**
+ * Modify user password response
+ */
+export interface ModifyUserPaswdRes
+  extends ResBody {}

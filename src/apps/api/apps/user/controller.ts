@@ -20,7 +20,9 @@ import {
   EditUserInfoReq,
   EditUserInfoFields,
   EditUserInfoResData,
-  EditUserInfoRes
+  EditUserInfoRes,
+  ModifyUserPaswdReq,
+  ModifyUserPaswdRes
 } from './interface'
 import {
   SessionInfoDoc,
@@ -53,9 +55,8 @@ export function register(): RequestHandler {
     /** 解密数据 */
 
     // 解密密码
-    try {
-      reqData.password = rsaDecrypt(reqData.password)
-    } catch (error) {
+    reqData.password = rsaDecrypt(reqData.password)
+    if (!reqData.password) {
       const resData: UserRegisterRes = view.getUserRegResData(4)
       res.json(resData)
       return
@@ -204,10 +205,8 @@ export function login(): RequestHandler {
     /** 解密数据 */
 
     // 解密密码
-    let reqUserPassword: string = ''
-    try {
-      reqUserPassword = rsaDecrypt(reqData.password)
-    } catch (error) {
+    reqData.password = rsaDecrypt(reqData.password)
+    if (!reqData.password) {
       const resData: UserLoginRes = view.getUserLoginResData(2)
       res.json(resData)
       return
@@ -221,9 +220,7 @@ export function login(): RequestHandler {
     // 需要查询的字段（依据命中概率排序）
     const queryFields: string[] = [
       'userAccount',
-      'userName',
-      'phone',
-      'email'
+      'userName'
     ]
 
     // 查询用户 ID
@@ -251,11 +248,10 @@ export function login(): RequestHandler {
     }
 
     // 查询密码
-    let userPasswordDoc
+    let userPasswordDoc: UserPasswordDoc
     try {
       userPasswordDoc = await UserPasswordModel.findOne(
-        { userId },
-        { password: true, _id: false }
+        { userId }
       )
     } catch (error) {
       next(error)
@@ -263,7 +259,7 @@ export function login(): RequestHandler {
     }
 
     // 验证用户密码
-    const encryptedUserPassword: string = MD5(reqUserPassword).toString()
+    const encryptedUserPassword: string = MD5(reqData.password).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
       const resData: UserLoginRes = view.getUserLoginResData(2)
       res.json(resData)
@@ -329,8 +325,9 @@ export function login(): RequestHandler {
       return
     }
 
-    const defaultResData = view.getUserLoginResData()
+    const defaultResData: UserLoginRes = view.getUserLoginResData()
     res.json(defaultResData)
+    return
   }
 }
 
@@ -372,8 +369,9 @@ export function logout(): SessionRequestHandler {
       return
     }
 
-    const defaultResData = view.getUserLogoutResData()
+    const defaultResData: UserLogoutRes = view.getUserLogoutResData()
     res.json(defaultResData)
+    return
   }
 }
 
@@ -428,8 +426,9 @@ export function getInfo(): SessionRequestHandler {
       return
     }
 
-    const defaultResData = view.getUserInfoResData()
+    const defaultResData: GetUserInfoRes = view.getUserInfoResData()
     res.json(defaultResData)
+    return
   }
 }
 
@@ -522,7 +521,109 @@ export function editInfo(): SessionRequestHandler {
       return
     }
 
-    const defaultResData = view.getEditUserInfoResData()
+    const defaultResData: EditUserInfoRes = view.getEditUserInfoResData()
     res.json(defaultResData)
+    return
+  }
+}
+
+/**
+ * Modify user password API controller
+ * @returns {SessionRequestHandler} Session request handler of Express app
+ */
+export function modifyPassword(): SessionRequestHandler {
+  return async (req: SessionRequest, res: Response, next: NextFunction) => {
+    // 从会话信息获取用户 ID 与会话 ID
+    const userId: string = req.session.userId
+    const sessionId: string = req.session.sessionId
+    if (!userId || !sessionId) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(2)
+      res.json(resData)
+      return
+    }
+
+    // 获取请求数据
+    const reqData: ModifyUserPaswdReq = req.body
+
+    // 解密密码
+    reqData.oldPassword = rsaDecrypt(reqData.oldPassword)
+    reqData.newPassword = rsaDecrypt(reqData.newPassword)
+
+    // 验证旧密码解密结果
+    if (!reqData.oldPassword) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(2)
+      res.json(resData)
+      return
+    }
+
+    // 验证新密码解密结果
+    if (!reqData.newPassword) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(3)
+      res.json(resData)
+      return
+    }
+
+    // 查询旧密码
+    let userPasswordDoc: UserPasswordDoc
+    try {
+      userPasswordDoc = await UserPasswordModel.findOne(
+        { userId }
+      )
+    } catch (error) {
+      next(error)
+      throw error
+    }
+
+    // 验证用户旧密码
+    const encryptedUserOldPassword: string = MD5(reqData.oldPassword).toString()
+    if (!userPasswordDoc.password || encryptedUserOldPassword !== userPasswordDoc.password) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(2)
+      res.json(resData)
+      return
+    }
+
+    // 验证新密码有效性
+    if (!reqData.newPassword || reqData.newPassword.length < 6) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(3)
+      res.json(resData)
+      return
+    }
+
+    /** 处理修改密码事件 */
+
+    // MD5 单向加密新密码
+    const encryptedUserNewPassword: string = MD5(reqData.newPassword).toString()
+
+    // 更新用户密码
+    let userPasswordUpdateRes: UserPasswordDoc
+    try {
+      userPasswordUpdateRes = await UserPasswordModel.findOneAndUpdate(
+        { userId },
+        { password: encryptedUserNewPassword },
+        { new: true, useFindAndModify: false }
+      )
+    } catch (error) {
+      next(error)
+      throw error
+    }
+
+    // 删除当前会话信息
+    try {
+      await SessionInfoModel.deleteOne({ sessionId })
+    } catch (error) {
+      next(error)
+      throw error
+    }
+
+    // 密码修改成功
+    if (userPasswordUpdateRes && userPasswordUpdateRes.password === encryptedUserNewPassword) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(1)
+      res.json(resData)
+      return
+    }
+
+    const defaultResData: ModifyUserPaswdRes = view.getModifyUserPaswdResData()
+    res.json(defaultResData)
+    return
   }
 }

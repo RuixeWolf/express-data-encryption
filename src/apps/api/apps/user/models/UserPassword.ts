@@ -2,11 +2,11 @@
  * UserPassword model
  */
 
-import { connect, Schema, Model, model } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 
 // Connect to MongoDB
-connect(
+mongoose.connect(
   mongodbUrl,
   {
     useNewUrlParser: true,
@@ -29,6 +29,6 @@ const UserPasswordSchema: Schema = new Schema({
 })
 
 // Create user password model
-const UserPasswordModel: Model<any, any, any> = model('UserPassword', UserPasswordSchema)
+const UserPasswordModel: Model<any, any, any> = mongoose.model('UserPassword', UserPasswordSchema)
 
 export default UserPasswordModel
