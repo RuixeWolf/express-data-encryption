@@ -3,7 +3,7 @@
  */
 
 // Register module alias
-require('module-alias/register')
+import 'module-alias/register'
 
 import express, { Express } from 'express'
 import * as serverConfig from './configs/server'
