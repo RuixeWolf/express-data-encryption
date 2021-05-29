@@ -35,7 +35,7 @@ export function getUserRegResData(statusCode?: number, data?: UserInfoDoc | any)
 
   // Init res data
   let userRegResData: UserRegisterRes = {
-    msg: '',
+    message: '',
     success: false,
     statusCode,
     data
@@ -45,37 +45,37 @@ export function getUserRegResData(statusCode?: number, data?: UserInfoDoc | any)
   switch (statusCode) {
     case 1:
       // 注册成功
-      userRegResData.msg = '注册成功'
+      userRegResData.message = '注册成功'
       userRegResData.success = true
       return userRegResData
 
     case 2:
       // 用户名无效
-      userRegResData.msg = '用户名无效'
+      userRegResData.message = '用户名无效'
       return userRegResData
 
     case 3:
       // 用户名已存在
-      userRegResData.msg = '用户名已被占用'
+      userRegResData.message = '用户名已被占用'
       return userRegResData
 
     case 4:
       // 密码无效
-      userRegResData.msg = '密码无效'
+      userRegResData.message = '密码无效'
       return userRegResData
     
     case 5:
       // 邮箱无效
-      userRegResData.msg = '邮箱格式有误'
+      userRegResData.message = '邮箱格式有误'
       return userRegResData
 
     case 6:
       // 手机号无效
-      userRegResData.msg = '手机号格式有误'
+      userRegResData.message = '手机号格式有误'
       return userRegResData
       
     default:
-      userRegResData.msg = '注册失败'
+      userRegResData.message = '注册失败'
       userRegResData.statusCode = 0
       return userRegResData
   }
@@ -94,7 +94,7 @@ export function getUserLoginResData(statusCode?: number, data?: any): UserLoginR
   data = data || {}
 
   let userLoginResData: UserLoginRes = {
-    msg: '',
+    message: '',
     success: false,
     statusCode,
     data
@@ -103,17 +103,17 @@ export function getUserLoginResData(statusCode?: number, data?: any): UserLoginR
   switch (statusCode) {
     case 1:
       // 登陆成功
-      userLoginResData.msg = '登陆成功'
+      userLoginResData.message = '登陆成功'
       userLoginResData.success = true
       return userLoginResData
 
     case 2:
       // 用户不存在或密码无效
-      userLoginResData.msg = '用户不存在或密码不正确'
+      userLoginResData.message = '用户不存在或密码不正确'
       return userLoginResData
 
     default:
-      userLoginResData.msg = '登录失败'
+      userLoginResData.message = '登录失败'
       userLoginResData.statusCode = 0
       return userLoginResData
   }
@@ -132,7 +132,7 @@ export function getUserInfoResData(statusCode?: number, data?: GetUserInfoResDat
   data = data || {}
 
   let resData: GetUserInfoRes = {
-    msg: '',
+    message: '',
     success: false,
     statusCode,
     data
@@ -141,17 +141,17 @@ export function getUserInfoResData(statusCode?: number, data?: GetUserInfoResDat
   switch (statusCode) {
     case 1:
       // 获取用户信息成功
-      resData.msg = 'success'
+      resData.message = 'success'
       resData.success = true
       return resData
 
     case 2:
       // 用户不存在
-      resData.msg = '用户不存在'
+      resData.message = '用户不存在'
       return resData
 
     default:
-      resData.msg = 'fail'
+      resData.message = 'fail'
       resData.statusCode = 0
       return resData
   }
@@ -170,7 +170,7 @@ export function getUserLogoutResData(statusCode?: number, data?: any): UserLogou
   data = data || {}
 
   let resData: UserLogoutRes = {
-    msg: '',
+    message: '',
     success: false,
     statusCode,
     data
@@ -179,17 +179,17 @@ export function getUserLogoutResData(statusCode?: number, data?: any): UserLogou
   switch (statusCode) {
     case 1:
       // 退出登录成功
-      resData.msg = '已退出登录'
+      resData.message = '已退出登录'
       resData.success = true
       return resData
 
     case 2:
       // 用户不存在
-      resData.msg = '用户不存在'
+      resData.message = '用户不存在'
       return resData
 
     default:
-      resData.msg = 'fail'
+      resData.message = 'fail'
       resData.statusCode = 0
       return resData
   }
@@ -210,7 +210,7 @@ export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoR
   data = data || {}
 
   let resData: EditUserInfoRes = {
-    msg: '',
+    message: '',
     success: false,
     statusCode,
     data
@@ -219,27 +219,27 @@ export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoR
   switch (statusCode) {
     case 1:
       // 修改用户信息成功
-      resData.msg = '用户信息已更改'
+      resData.message = '用户信息已更改'
       resData.success = true
       return resData
 
     case 2:
       // 用户不存在
-      resData.msg = '用户不存在'
+      resData.message = '用户不存在'
       return resData
 
     case 3:
       // 邮箱无效
-      resData.msg = '邮箱格式有误'
+      resData.message = '邮箱格式有误'
       return resData
 
     case 4:
       // 手机号无效
-      resData.msg = '手机号格式有误'
+      resData.message = '手机号格式有误'
       return resData
 
     default:
-      resData.msg = 'fail'
+      resData.message = 'fail'
       resData.statusCode = 0
       return resData
   }
@@ -257,7 +257,7 @@ export function getModifyUserPaswdResData(statusCode?: number): ModifyUserPaswdR
   statusCode = statusCode || 0
 
   let resData: ModifyUserPaswdRes = {
-    msg: '',
+    message: '',
     success: false,
     statusCode
   }
@@ -265,22 +265,22 @@ export function getModifyUserPaswdResData(statusCode?: number): ModifyUserPaswdR
   switch (statusCode) {
     case 1:
       // 密码修改成功
-      resData.msg = '密码已更改'
+      resData.message = '密码已更改'
       resData.success = true
       return resData
     
     case 2:
       // 用户不存在
-      resData.msg = '用户不存在或旧密码不正确'
+      resData.message = '用户不存在或旧密码不正确'
       return resData
     
     case 3:
       // 新密码无效
-      resData.msg = '新密码无效'
+      resData.message = '新密码无效'
       return resData
 
     default:
-      resData.msg = 'fail'
+      resData.message = 'fail'
       resData.statusCode = 0
       return resData
   }

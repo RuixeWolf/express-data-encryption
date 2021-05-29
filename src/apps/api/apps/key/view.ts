@@ -12,7 +12,7 @@ import { GetPubKeyRes } from './interface'
 export function getRsaPubKeyRes(rsaPubKey: string): GetPubKeyRes {
   // Init default response data
   let getPubKeyRes: GetPubKeyRes = {
-    msg: 'fail',
+    message: 'fail',
     success: false,
     statusCode: 0,
     data: {
@@ -21,7 +21,7 @@ export function getRsaPubKeyRes(rsaPubKey: string): GetPubKeyRes {
   }
 
   if (rsaPubKey) {
-    getPubKeyRes.msg = 'success'
+    getPubKeyRes.message = 'success'
     getPubKeyRes.success = true
     getPubKeyRes.statusCode = 1
     getPubKeyRes.data.pubKey = rsaPubKey

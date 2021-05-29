@@ -2,12 +2,12 @@
  * App interface
  */
 
-import { ResBody } from '@interfaces/resBody'
+import { JsonRes } from '@interfaces/resBody'
 
 /**
  * Get key response
  */
-export interface GetPubKeyRes extends ResBody {
+export interface GetPubKeyRes extends JsonRes {
   data: {
     pubKey: string
   }

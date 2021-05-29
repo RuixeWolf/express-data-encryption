@@ -2,7 +2,7 @@
  * App interface
  */
 
-import { ResBody } from '@interfaces/resBody'
+import { JsonRes } from '@interfaces/resBody'
 
 /**
  * User information MongoDB document
@@ -42,7 +42,7 @@ export interface UserRegisterReq {
 /**
  * User register response data
  */
-export interface UserRegisterRes extends ResBody {
+export interface UserRegisterRes extends JsonRes {
   data: UserInfoDoc | any
 }
 
@@ -57,7 +57,7 @@ export interface UserLoginReq {
 /**
  * User login response data
  */
-export interface UserLoginRes extends ResBody {
+export interface UserLoginRes extends JsonRes {
   data: any
 }
 
@@ -79,14 +79,14 @@ export interface GetUserInfoResData {
 /**
  * User information response data
  */
-export interface GetUserInfoRes extends ResBody {
+export interface GetUserInfoRes extends JsonRes {
   data: GetUserInfoResData | any
 }
 
 /**
  * User logout response data
  */
-export interface UserLogoutRes extends ResBody {
+export interface UserLogoutRes extends JsonRes {
   data: any
 }
 
@@ -135,4 +135,4 @@ export interface ModifyUserPaswdReq {
  * Modify user password response
  */
 export interface ModifyUserPaswdRes
-  extends ResBody {}
+  extends JsonRes {}

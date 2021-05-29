@@ -5,8 +5,8 @@
 /**
  * Default JSON response body
  */
-export interface ResBody {
-  msg: string
+export interface JsonRes {
+  message: string
   success: boolean
   statusCode: number
 }

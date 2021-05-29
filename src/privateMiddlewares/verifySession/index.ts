@@ -6,6 +6,8 @@ import { Response, NextFunction } from 'express'
 import { SessionRequestHandler, SessionRequest, SessionInfoDoc } from '@interfaces/session'
 import { parseToken } from '@utils/sessionToken'
 import SessionInfoModel from '@models/SessionInfo'
+import * as view from './view'
+import { JsonRes } from '@interfaces/resBody'
 
 /**
  * Verify session information
@@ -20,7 +22,8 @@ export function verifySession(): SessionRequestHandler {
     // 验证请求头是否包含 Authorization
     if (!authToken) {
       res.status(403)
-      res.send('Request header without Authorization')
+      const resData: JsonRes = view.verifySessionRes(10001)
+      res.json(resData)
       return
     }
 
@@ -29,7 +32,8 @@ export function verifySession(): SessionRequestHandler {
     // 验证解密结果
     if (!sessionId) {
       res.status(403)
-      res.send('Token is invalid')
+      const resData: JsonRes = view.verifySessionRes(10002)
+      res.json(resData)
       return
     }
 
@@ -47,7 +51,8 @@ export function verifySession(): SessionRequestHandler {
     // 验证查询结果
     if (!sessionInfo || authToken !== sessionInfo.authToken) {
       res.status(403)
-      res.send('Token is invalid')
+      const resData: JsonRes = view.verifySessionRes(10002)
+      res.json(resData)
       return
     }
 
@@ -64,7 +69,8 @@ export function verifySession(): SessionRequestHandler {
         throw error
       }
       res.status(403)
-      res.send('Token is expired')
+      const resData: JsonRes = view.verifySessionRes(10003)
+      res.json(resData)
       return
     }
 
