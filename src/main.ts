@@ -11,6 +11,7 @@ import middlewares from './publicMiddlewares'
 import staticFiles from './static'
 import router from './router'
 import { serverErrorHandler } from './serverError'
+import { printLog } from '@utils/printLog'
 
 // Create Express app
 const app: Express = express()
@@ -30,5 +31,5 @@ app.use(serverErrorHandler())
 // Start http server
 app.listen(serverConfig.port, () => {
   console.clear()
-  console.log(`\nServer is running at http://localhost:${serverConfig.port}\n`)
+  printLog('Service is running at', `http://localhost:${serverConfig.port}/`, 0)
 })

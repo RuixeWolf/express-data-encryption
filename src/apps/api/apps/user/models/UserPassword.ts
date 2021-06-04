@@ -4,6 +4,7 @@
 
 import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
+import { printLog } from '@utils/printLog'
 
 // Connect to MongoDB
 mongoose.connect(
@@ -13,7 +14,7 @@ mongoose.connect(
     useUnifiedTopology: true
   }
 ).catch(err => {
-  throw err
+  printLog(err.name, err.message, 3)
 })
 
 // Create user password schema

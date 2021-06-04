@@ -81,7 +81,7 @@ export function register(): RequestHandler {
       }
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 验证密码（必填）
@@ -121,7 +121,7 @@ export function register(): RequestHandler {
       }
     } catch (error) {
       next(error)
-      throw error
+      return
     }
     
     // 生成账号并查重
@@ -136,7 +136,7 @@ export function register(): RequestHandler {
       }
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // MD5 单向加密密码
@@ -176,7 +176,7 @@ export function register(): RequestHandler {
       userPasswordSaveRes = await newUserPasswordModel.save()
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 注册成功
@@ -219,8 +219,8 @@ export function login(): RequestHandler {
 
     // 需要查询的字段（依据命中概率排序）
     const queryFields: string[] = [
-      'userAccount',
-      'userName'
+      'userName',
+      'userAccount'
     ]
 
     // 查询用户 ID
@@ -237,7 +237,7 @@ export function login(): RequestHandler {
       }
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 验证用户 ID
@@ -255,7 +255,7 @@ export function login(): RequestHandler {
       )
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 验证用户密码
@@ -273,7 +273,7 @@ export function login(): RequestHandler {
       await SessionInfoModel.deleteMany({ userId })
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 生成会话 ID 并查重
@@ -288,7 +288,7 @@ export function login(): RequestHandler {
       }
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 生成 token
@@ -315,7 +315,7 @@ export function login(): RequestHandler {
       sessionInfoSaveRes = await newSessionInfoModel.save()
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 登录成功
@@ -352,7 +352,7 @@ export function logout(): SessionRequestHandler {
       sessionDelRes = await SessionInfoModel.deleteOne({ sessionId })
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 生成退出登录响应数据
@@ -396,7 +396,7 @@ export function getInfo(): SessionRequestHandler {
       userInfoDoc = await UserInfoModel.findOne({ userId }, { _id: false })
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 用户不存在
@@ -501,7 +501,7 @@ export function editInfo(): SessionRequestHandler {
       )
     } catch (error) {
       next(error)
-      throw error
+      return
     }
     
     // 用户不存在
@@ -581,7 +581,7 @@ export function modifyPassword(): SessionRequestHandler {
       )
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 验证用户旧密码
@@ -614,7 +614,7 @@ export function modifyPassword(): SessionRequestHandler {
       )
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 删除当前会话信息
@@ -622,7 +622,7 @@ export function modifyPassword(): SessionRequestHandler {
       await SessionInfoModel.deleteOne({ sessionId })
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 密码修改成功

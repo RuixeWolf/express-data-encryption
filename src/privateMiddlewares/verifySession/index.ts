@@ -46,7 +46,7 @@ export function verifySession(): SessionRequestHandler {
       )
     } catch (error) {
       next(error)
-      throw error
+      return
     }
     // 验证查询结果
     if (!sessionInfo || authToken !== sessionInfo.authToken) {
@@ -66,7 +66,7 @@ export function verifySession(): SessionRequestHandler {
         await SessionInfoModel.deleteOne({ sessionId: sessionInfo.sessionId })
       } catch (error) {
         next(error)
-        throw error
+        return
       }
       res.status(403)
       const resData: JsonRes = view.verifySessionRes(10003)
@@ -87,7 +87,7 @@ export function verifySession(): SessionRequestHandler {
       )
     } catch (error) {
       next(error)
-      throw error
+      return
     }
 
     // 将 sessionInfo 添加至 req.session

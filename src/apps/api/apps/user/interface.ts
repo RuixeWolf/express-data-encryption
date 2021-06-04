@@ -94,10 +94,10 @@ export interface UserLogoutRes extends JsonRes {
  * Edit user information request data
  */
 export interface EditUserInfoReq {
-  nickName: string | null
-  avatar: string | null
-  email: string | null
-  phone: string | null
+  nickName?: string | null
+  avatar?: string | null
+  email?: string | null
+  phone?: string | null
 }
 
 /**
