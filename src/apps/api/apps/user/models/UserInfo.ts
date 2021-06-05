@@ -5,6 +5,7 @@
 import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
+import { UserInfoDoc } from '../interface'
 
 // Connect to MongoDB
 mongoose.connect(
@@ -53,6 +54,6 @@ const UserInfoSchema: Schema = new Schema({
 })
 
 // Create user info model
-const UserInfoModel: Model<any, any, any> = mongoose.model('UserInfo', UserInfoSchema)
+const UserInfoModel: Model<UserInfoDoc, unknown, unknown> = mongoose.model('UserInfo', UserInfoSchema)
 
 export default UserInfoModel

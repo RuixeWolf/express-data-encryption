@@ -5,6 +5,7 @@
 import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
+import { UserPasswordDoc } from '../interface'
 
 // Connect to MongoDB
 mongoose.connect(
@@ -30,6 +31,6 @@ const UserPasswordSchema: Schema = new Schema({
 })
 
 // Create user password model
-const UserPasswordModel: Model<any, any, any> = mongoose.model('UserPassword', UserPasswordSchema)
+const UserPasswordModel: Model<UserPasswordDoc, unknown, unknown> = mongoose.model('UserPassword', UserPasswordSchema)
 
 export default UserPasswordModel

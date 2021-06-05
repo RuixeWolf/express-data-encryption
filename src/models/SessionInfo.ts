@@ -5,6 +5,7 @@
 import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
+import { SessionInfoDoc } from '@interfaces/session'
 
 // Connect to MongoDB
 mongoose.connect(
@@ -40,5 +41,5 @@ const SessionInfoSchema = new Schema({
   }
 })
 
-const SessionInfoModel: Model<any, any, any> = mongoose.model('SessionInfo', SessionInfoSchema)
+const SessionInfoModel: Model<SessionInfoDoc, unknown, unknown> = mongoose.model('SessionInfo', SessionInfoSchema)
 export default SessionInfoModel

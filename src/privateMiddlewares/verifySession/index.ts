@@ -8,12 +8,13 @@ import { parseToken } from '@utils/sessionToken'
 import SessionInfoModel from '@models/SessionInfo'
 import * as view from './view'
 import { JsonRes } from '@interfaces/resBody'
+import { Document } from 'mongoose'
 
 /**
  * Verify session information
  * @returns {SessionRequestHandler} Session request handler of Express app
  */
-export function verifySession(): SessionRequestHandler {
+export function verifySession (): SessionRequestHandler {
   return async (req: SessionRequest, res: Response, next: NextFunction) => {
     /** 验证会话有效性 */
 
@@ -38,7 +39,7 @@ export function verifySession(): SessionRequestHandler {
     }
 
     // 查询会话信息
-    let sessionInfo: SessionInfoDoc
+    let sessionInfo: (SessionInfoDoc & Document<SessionInfoDoc, unknown>) | null
     try {
       sessionInfo = await SessionInfoModel.findOne(
         { sessionId },
@@ -48,6 +49,7 @@ export function verifySession(): SessionRequestHandler {
       next(error)
       return
     }
+
     // 验证查询结果
     if (!sessionInfo || authToken !== sessionInfo.authToken) {
       res.status(403)

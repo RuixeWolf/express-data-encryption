@@ -8,7 +8,7 @@ import { StaticFileConfig } from '@interfaces/staticFileConfig'
 /**
  * Static file config list
  */
-export const staticFileConfigs: StaticFileConfig[] = [
+export const staticFileConfigs: Array<StaticFileConfig> = [
   // Default static files config
   {
     urlPath: '/static',

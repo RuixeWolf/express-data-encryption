@@ -12,7 +12,8 @@ import {
   UserLogoutRes,
   EditUserInfoResData,
   EditUserInfoRes,
-  ModifyUserPaswdRes
+  ModifyUserPaswdRes,
+  AccountCancellationRes
 } from './interface'
 
 /**
@@ -24,10 +25,10 @@ import {
  * + 4: 密码无效
  * + 5: 邮箱无效
  * + 6: 手机号无效
- * @param {(UserInfoDoc|any)} [data = {}] - Registration data
+ * @param {UserInfoDoc | unknown} [data = {}] - Registration data
  * @returns {UserRegisterRes} User register response data
  */
-export function getUserRegResData(statusCode?: number, data?: UserInfoDoc | any): UserRegisterRes {
+export function getUserRegResData (statusCode?: number, data?: UserInfoDoc | unknown): UserRegisterRes {
   // Set status code
   statusCode = statusCode || 0
   // Set data
@@ -86,10 +87,10 @@ export function getUserRegResData(statusCode?: number, data?: UserInfoDoc | any)
  * @param {number} [statusCode = 0] - User login status code
  * + 1: 登录成功
  * + 2: 用户不存在或密码无效
- * @param {any} [data = {}] - Login data
+ * @param {unknown} [data = {}] - Login data
  * @returns User login response data
  */
-export function getUserLoginResData(statusCode?: number, data?: any): UserLoginRes {
+export function getUserLoginResData (statusCode?: number, data?: unknown): UserLoginRes {
   statusCode = statusCode || 0
   data = data || {}
 
@@ -124,10 +125,10 @@ export function getUserLoginResData(statusCode?: number, data?: any): UserLoginR
  * @param {number} [statusCode = 0] - Get user information status code
  * + 1: 获取用户信息成功
  * + 2: 用户不存在
- * @param {(UserInfoResData | any)} data - User information data
+ * @param {UserInfoResData | unknown} data - User information data
  * @returns {UserInfoRes} User information response data
  */
-export function getUserInfoResData(statusCode?: number, data?: GetUserInfoResData | any): GetUserInfoRes {
+export function getUserInfoResData (statusCode?: number, data?: GetUserInfoResData | unknown): GetUserInfoRes {
   statusCode = statusCode || 0
   data = data || {}
 
@@ -162,10 +163,10 @@ export function getUserInfoResData(statusCode?: number, data?: GetUserInfoResDat
  * @param {number} [statusCode = 0] - User logout status code
  * + 1: 退出登录成功
  * + 2: 用户不存在
- * @param {any} data - User logout data
+ * @param {unknown} data - User logout data
  * @returns {UserLogoutRes} User logout response data
  */
-export function getUserLogoutResData(statusCode?: number, data?: any): UserLogoutRes {
+export function getUserLogoutResData (statusCode?: number, data?: unknown): UserLogoutRes {
   statusCode = statusCode || 0
   data = data || {}
 
@@ -202,10 +203,10 @@ export function getUserLogoutResData(statusCode?: number, data?: any): UserLogou
  * + 2: 用户不存在
  * + 3: 邮箱无效
  * + 4: 手机号无效
- * @param {(EditUserInfoResData | any)} data - User information data
+ * @param {EditUserInfoResData | unknown} data - User information data
  * @returns {EditUserInfoRes} Edit user information response data
  */
-export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoResData | any): EditUserInfoRes {
+export function getEditUserInfoResData (statusCode?: number, data?: EditUserInfoResData | unknown): EditUserInfoRes {
   statusCode = statusCode || 0
   data = data || {}
 
@@ -253,7 +254,7 @@ export function getEditUserInfoResData(statusCode?: number, data?: EditUserInfoR
  * + 3: 新密码无效
  * @returns {ModifyUserPaswdRes} Modify user password response data
  */
-export function getModifyUserPaswdResData(statusCode?: number): ModifyUserPaswdRes {
+export function getModifyUserPaswdResData (statusCode?: number): ModifyUserPaswdRes {
   statusCode = statusCode || 0
 
   let resData: ModifyUserPaswdRes = {
@@ -270,13 +271,51 @@ export function getModifyUserPaswdResData(statusCode?: number): ModifyUserPaswdR
       return resData
     
     case 2:
-      // 用户不存在
+      // 用户不存在或旧密码无效
       resData.message = '用户不存在或旧密码不正确'
       return resData
     
     case 3:
       // 新密码无效
       resData.message = '新密码无效'
+      return resData
+
+    default:
+      resData.message = 'fail'
+      resData.statusCode = 0
+      return resData
+  }
+}
+
+/**
+ * Get user account cancellation response
+ * @param {number} statusCode - Account cancellation satus code
+ * + 1: 账号注销成功
+ * + 2: 用户不存在或密码无效
+ * @param {unknown} data - Account cancellation data
+ * @returns {AccountCancellationRes} User account cancellation response
+ */
+export function getAccountCancellationRes (statusCode?: number, data?: unknown): AccountCancellationRes {
+  statusCode = statusCode || 0
+  data = data || {}
+
+  let resData: AccountCancellationRes = {
+    message: '',
+    success: false,
+    statusCode,
+    data
+  }
+
+  switch(statusCode) {
+    case 1:
+      // 账号注销成功
+      resData.message = '账号已注销'
+      resData.success = true
+      return resData
+    
+    case 2:
+      // 用户不存在或密码无效
+      resData.message = '用户不存在或密码不正确'
       return resData
 
     default:

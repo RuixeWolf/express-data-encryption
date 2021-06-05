@@ -12,7 +12,7 @@ import { JsonRes } from '@interfaces/resBody'
  * + 10003: Token 过期
  * @returns {JsonRes} Verify session response data
  */
-export function verifySessionRes(statusCode?: number): JsonRes {
+export function verifySessionRes (statusCode?: number): JsonRes {
   statusCode = statusCode || 10000
 
   let resData: JsonRes = {

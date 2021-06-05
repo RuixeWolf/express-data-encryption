@@ -13,7 +13,7 @@ const secretKey: string = 'jhvi@u3*7s%ia93gtyhbs^as@17'
  * @param {string} sessionId - Client session ID
  * @returns {string} Client authorization token
  */
-export function generateToken(sessionId: string): string {
+export function generateToken (sessionId: string): string {
   try {
     const token: string = AES.encrypt(sessionId, secretKey).toString()
     return token
@@ -27,7 +27,7 @@ export function generateToken(sessionId: string): string {
  * @param {string} token - Client authorization token
  * @returns {string} - Client session ID
  */
-export function parseToken(token: string): string {
+export function parseToken (token: string): string {
   try {
     const sessionId: string = AES.decrypt(token, secretKey).toString(encUtf8)
     return sessionId

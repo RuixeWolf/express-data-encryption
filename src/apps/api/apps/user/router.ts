@@ -61,4 +61,15 @@ router.get(
   controller.modifyPassword() as RequestHandler
 )
 
+/**
+ * $route POST /api/user/cancellation
+ * @description User account cancellation
+ * @access private
+ */
+ router.post(
+  '/cancellation',
+  verifySession() as RequestHandler,
+  controller.accountCancellation() as RequestHandler
+)
+
 export default router

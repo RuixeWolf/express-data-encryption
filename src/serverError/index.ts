@@ -10,7 +10,7 @@ import { printLog } from '@utils/printLog'
  * Default internal server error handler
  * @returns {ErrorRequestHandler}
  */
-export function serverErrorHandler(): ErrorRequestHandler {
+export function serverErrorHandler (): ErrorRequestHandler {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err) {
       // Print error

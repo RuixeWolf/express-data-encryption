@@ -15,7 +15,7 @@ const privateKeyPath: string = path.join(__dirname, './keys/rsa_1024_priv.pem')
  * @param {string} content - String to be encrypted
  * @returns {string} Encrypt result
  */
-export function rsaEncrypt(content: string): string {
+export function rsaEncrypt (content: string): string {
   try {
     const publicKeyContent: string = fs.readFileSync(publicKeyPath).toString('utf8')
     const nodeRsa = new NodeRSA(publicKeyContent)
@@ -32,7 +32,7 @@ export function rsaEncrypt(content: string): string {
  * @param {string} content - String to be decrypted
  * @returns {string} Decrypt result
  */
-export function rsaDecrypt(content: string): string {
+export function rsaDecrypt (content: string): string {
   try {
     const privateKeyContent: string = fs.readFileSync(privateKeyPath).toString('utf8')
     const nodeRsa = new NodeRSA(privateKeyContent)
@@ -48,7 +48,7 @@ export function rsaDecrypt(content: string): string {
  * Get public key
  * @returns {string} Public key content
  */
-export function getPublicKey(): string {
+export function getPublicKey (): string {
   try {
     const publicKeyContent: string = fs.readFileSync(publicKeyPath).toString('utf8')
     return publicKeyContent
@@ -61,7 +61,7 @@ export function getPublicKey(): string {
  * Get private key
  * @returns {string} Private key content
  */
-export function getPrivateKey(): string {
+export function getPrivateKey (): string {
   try {
     const privateKeyContent: string = fs.readFileSync(privateKeyPath).toString('utf8')
     return privateKeyContent

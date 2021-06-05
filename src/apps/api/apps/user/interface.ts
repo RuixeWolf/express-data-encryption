@@ -40,10 +40,10 @@ export interface UserRegisterReq {
 }
 
 /**
- * User register response data
+ * User register response
  */
 export interface UserRegisterRes extends JsonRes {
-  data: UserInfoDoc | any
+  data: UserInfoDoc | unknown
 }
 
 /**
@@ -55,14 +55,14 @@ export interface UserLoginReq {
 }
 
 /**
- * User login response data
+ * User login response
  */
 export interface UserLoginRes extends JsonRes {
-  data: any
+  data: unknown
 }
 
 /**
- * Get user info response date
+ * Get user info response data
  */
 export interface GetUserInfoResData {
   userId: string
@@ -77,17 +77,17 @@ export interface GetUserInfoResData {
 }
 
 /**
- * User information response data
+ * User information response
  */
 export interface GetUserInfoRes extends JsonRes {
-  data: GetUserInfoResData | any
+  data: GetUserInfoResData | unknown
 }
 
 /**
- * User logout response data
+ * User logout response
  */
 export interface UserLogoutRes extends JsonRes {
-  data: any
+  data: unknown
 }
 
 /**
@@ -115,13 +115,13 @@ export interface EditUserInfoFields {
  * Edit user information response data
  */
 export interface EditUserInfoResData
-  extends GetUserInfoResData {}
+extends GetUserInfoResData {}
 
 /**
  * Edit user information response
  */
 export interface EditUserInfoRes
-  extends GetUserInfoRes {}
+extends GetUserInfoRes {}
 
 /**
  * Modify user password request
@@ -135,4 +135,19 @@ export interface ModifyUserPaswdReq {
  * Modify user password response
  */
 export interface ModifyUserPaswdRes
-  extends JsonRes {}
+extends JsonRes {}
+
+/**
+ * User account cancellation request
+ */
+export interface AccountCancellationReq {
+  password: string
+}
+
+/**
+ * User account cancellation response
+ */
+export interface AccountCancellationRes
+extends JsonRes {
+  data: unknown
+}

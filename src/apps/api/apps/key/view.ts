@@ -9,7 +9,7 @@ import { GetPubKeyRes } from './interface'
  * @param {string} rsaPubKey - RSA public key
  * @returns {GetKeyRes} RSA public key response data
  */
-export function getRsaPubKeyRes(rsaPubKey: string): GetPubKeyRes {
+export function getRsaPubKeyRes (rsaPubKey: string): GetPubKeyRes {
   // Init default response data
   let getPubKeyRes: GetPubKeyRes = {
     message: 'fail',

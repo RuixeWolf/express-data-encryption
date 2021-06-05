@@ -28,7 +28,7 @@ app.use(router)
 // Register internal server error
 app.use(serverErrorHandler())
 
-// Start http server
+// Start http service
 app.listen(serverConfig.port, () => {
   console.clear()
   printLog('Service is running at', `http://localhost:${serverConfig.port}/`, 0)

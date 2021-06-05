@@ -7,7 +7,7 @@
  * @param {string} [language = 'en'] - User language preference
  * @returns {string} Internal server error response message
  */
-export function getErrMsg(language?: string): string {
+export function getErrMsg (language?: string): string {
   // Set language
   language = language || 'en'
 

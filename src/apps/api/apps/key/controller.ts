@@ -11,7 +11,7 @@ import { getPublicKey } from '@utils/rsaEncrypt'
  * Get RSA public key API controller
  * @returns {RequestHandler} Express request handler
  */
-export function getPubKey(): RequestHandler {
+export function getPubKey (): RequestHandler {
   return (req: Request, res: Response) => {
     // Get RSA public key
     const rsaPubKey: string = getPublicKey()

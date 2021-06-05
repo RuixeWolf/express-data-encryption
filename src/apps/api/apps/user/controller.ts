@@ -22,7 +22,9 @@ import {
   EditUserInfoResData,
   EditUserInfoRes,
   ModifyUserPaswdReq,
-  ModifyUserPaswdRes
+  ModifyUserPaswdRes,
+  AccountCancellationReq,
+  AccountCancellationRes
 } from './interface'
 import {
   SessionInfoDoc,
@@ -47,7 +49,7 @@ import { generateToken } from '@utils/sessionToken'
  * User register API controller
  * @returns {RequestHandler} Express request handler
  */
-export function register(): RequestHandler {
+export function register (): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
     // Receive request data
     const reqData: UserRegisterReq = req.body
@@ -125,11 +127,11 @@ export function register(): RequestHandler {
     }
     
     // 生成账号并查重
-    let userAccount: string = generateAccount(8)
+    let userAccount: string = generateAccount(10)
     try {
       while (true) {
         if (await UserInfoModel.findOne({ userAccount })) {
-          userAccount = generateAccount(8)
+          userAccount = generateAccount(10)
         } else {
           break
         }
@@ -169,8 +171,8 @@ export function register(): RequestHandler {
     const newUserPasswordModel: Document = new UserPasswordModel(newUserPasswordDoc)
 
     // 将用户信息与密码保存至 MongoDB
-    let userInfoSaveRes: Document | undefined
-    let userPasswordSaveRes: Document | undefined
+    let userInfoSaveRes: Document<UserInfoDoc> | undefined
+    let userPasswordSaveRes: Document<UserPasswordDoc> | undefined
     try {
       userInfoSaveRes = await newUserInfoModel.save()
       userPasswordSaveRes = await newUserPasswordModel.save()
@@ -197,7 +199,7 @@ export function register(): RequestHandler {
  * User login API controller
  * @returns {RequestHandler} Express request handler
  */
-export function login(): RequestHandler {
+export function login (): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
     // Receive request data
     const reqData: UserLoginReq = req.body
@@ -226,7 +228,7 @@ export function login(): RequestHandler {
     // 查询用户 ID
     try {
       for (const queryField of queryFields) {
-        const user = await UserInfoModel.findOne(
+        const user: (UserInfoDoc & Document<UserInfoDoc, unknown>) | null = await UserInfoModel.findOne(
           { [queryField]: reqData.user },
           { userId: true, _id: false }
         )
@@ -248,13 +250,20 @@ export function login(): RequestHandler {
     }
 
     // 查询密码
-    let userPasswordDoc: UserPasswordDoc
+    let userPasswordDoc: (UserPasswordDoc & Document<UserPasswordDoc, unknown>) | null
     try {
       userPasswordDoc = await UserPasswordModel.findOne(
         { userId }
       )
     } catch (error) {
       next(error)
+      return
+    }
+
+    // 用户不存在
+    if (!userPasswordDoc) {
+      const resData: UserLoginRes = view.getUserLoginResData(2)
+      res.json(resData)
       return
     }
 
@@ -335,7 +344,7 @@ export function login(): RequestHandler {
  * User logout API controller
  * @returns {SessionRequestHandler} Session request handler of Express app
  */
-export function logout(): SessionRequestHandler {
+export function logout (): SessionRequestHandler {
   return async (req: SessionRequest, res: Response, next: NextFunction) => {
     // 从会话信息获取用户 ID 与会话 ID
     const userId: string = req.session.userId
@@ -363,7 +372,7 @@ export function logout(): SessionRequestHandler {
     }
 
     // 退出登录成功
-    if (sessionDelRes && sessionDelRes.ok) {
+    if (sessionDelRes.ok) {
       const resData: UserLogoutRes = view.getUserLogoutResData(1, logoutData)
       res.json(resData)
       return
@@ -379,7 +388,7 @@ export function logout(): SessionRequestHandler {
  * Get user information API controller
  * @returns {SessionRequestHandler} Session request handler of Express app
  */
-export function getInfo(): SessionRequestHandler {
+export function getInfo (): SessionRequestHandler {
   return async (req: SessionRequest, res: Response, next: NextFunction) => {
     // 从会话信息获取用户 ID
     const userId: string = req.session.userId
@@ -391,7 +400,7 @@ export function getInfo(): SessionRequestHandler {
     }
 
     // 查询用户信息
-    let userInfoDoc: UserInfoDoc
+    let userInfoDoc: (UserInfoDoc & Document<UserInfoDoc>) | null
     try {
       userInfoDoc = await UserInfoModel.findOne({ userId }, { _id: false })
     } catch (error) {
@@ -436,7 +445,7 @@ export function getInfo(): SessionRequestHandler {
  * Edit user info API controller
  * @returns {SessionRequestHandler} Session request handler of Express app
  */
-export function editInfo(): SessionRequestHandler {
+export function editInfo (): SessionRequestHandler {
   return async (req: SessionRequest, res: Response, next: NextFunction) => {
     // 从会话信息获取用户 ID
     const userId: string = req.session.userId
@@ -492,7 +501,7 @@ export function editInfo(): SessionRequestHandler {
     }
 
     // 更新用户信息
-    let userInfoUpdateRes: UserInfoDoc
+    let userInfoUpdateRes: (UserInfoDoc & Document<UserInfoDoc>) | null
     try {
       userInfoUpdateRes = await UserInfoModel.findOneAndUpdate(
         { userId },
@@ -541,7 +550,7 @@ export function editInfo(): SessionRequestHandler {
  * Modify user password API controller
  * @returns {SessionRequestHandler} Session request handler of Express app
  */
-export function modifyPassword(): SessionRequestHandler {
+export function modifyPassword (): SessionRequestHandler {
   return async (req: SessionRequest, res: Response, next: NextFunction) => {
     // 从会话信息获取用户 ID 与会话 ID
     const userId: string = req.session.userId
@@ -574,13 +583,20 @@ export function modifyPassword(): SessionRequestHandler {
     }
 
     // 查询旧密码
-    let userPasswordDoc: UserPasswordDoc
+    let userPasswordDoc: (UserPasswordDoc & Document<UserPasswordDoc>) | null
     try {
       userPasswordDoc = await UserPasswordModel.findOne(
         { userId }
       )
     } catch (error) {
       next(error)
+      return
+    }
+
+    // 用户不存在
+    if (!userPasswordDoc) {
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(2)
+      res.json(resData)
       return
     }
 
@@ -605,7 +621,7 @@ export function modifyPassword(): SessionRequestHandler {
     const encryptedUserNewPassword: string = MD5(reqData.newPassword).toString()
 
     // 更新用户密码
-    let userPasswordUpdateRes: UserPasswordDoc
+    let userPasswordUpdateRes: (UserPasswordDoc & Document<UserPasswordDoc>) | null
     try {
       userPasswordUpdateRes = await UserPasswordModel.findOneAndUpdate(
         { userId },
@@ -633,6 +649,115 @@ export function modifyPassword(): SessionRequestHandler {
     }
 
     const defaultResData: ModifyUserPaswdRes = view.getModifyUserPaswdResData()
+    res.json(defaultResData)
+    return
+  }
+}
+
+/**
+ * User account cancellation API controller
+ * @returns {SessionRequestHandler} Session request handler of Express app
+ */
+export function accountCancellation (): SessionRequestHandler {
+  return async (req: SessionRequest, res: Response, next: NextFunction) => {
+    // 从会话信息获取用户 ID 与会话 ID
+    const userId: string = req.session.userId
+    const sessionId: string = req.session.sessionId
+    if (!userId || !sessionId) {
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(2)
+      res.json(resData)
+      return
+    }
+
+    // 获取请求数据
+    const reqData: AccountCancellationReq = req.body
+
+    // 解密密码
+    reqData.password = rsaDecrypt(reqData.password)
+
+    // 验证旧密码解密结果
+    if (!reqData.password) {
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(2)
+      res.json(resData)
+      return
+    }
+
+    // 查询密码
+    let userPasswordDoc: (UserPasswordDoc & Document<UserPasswordDoc>) | null
+    try {
+      userPasswordDoc = await UserPasswordModel.findOne(
+        { userId }
+      )
+    } catch (error) {
+      next(error)
+      return
+    }
+
+    // 用户不存在
+    if (!userPasswordDoc) {
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(2)
+      res.json(resData)
+      return
+    }
+
+    // 验证密码
+    const encryptedUserPassword: string = MD5(reqData.password).toString()
+    if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(2)
+      res.json(resData)
+      return
+    }
+
+    /** 处理用户账号注销事件 */
+
+    // 删除用户信息
+    let userInfoDelRes
+    try {
+      userInfoDelRes = await UserInfoModel.deleteOne(
+        { userId }
+      )
+    } catch (error) {
+      next(error)
+      return
+    }
+
+    // 删除密码信息
+    let passwordDelRes
+    try {
+      passwordDelRes = await UserPasswordModel.deleteOne(
+        { userId }
+      )
+    } catch (error) {
+      next(error)
+      return
+    }
+
+    // 删除该用户所有会话信息
+    let sessionDelRes
+    try {
+      sessionDelRes = await SessionInfoModel.deleteMany(
+        { userId }
+      )
+    } catch (error) {
+      next(error)
+      return
+    }
+
+    // 生成账号注销响应数据
+    const currentTime: Date = new Date()
+    const cancellationTime: string = currentTime.toISOString()
+    const cancellationData = {
+      cancellationTime
+    }
+
+    // 账号注销成功
+    if (userInfoDelRes.ok && passwordDelRes.ok && sessionDelRes.ok) {
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(1, cancellationData)
+      res.json(resData)
+      return
+    }
+
+    const defaultResData: AccountCancellationRes = view.getAccountCancellationRes()
     res.json(defaultResData)
     return
   }
