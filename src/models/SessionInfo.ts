@@ -2,7 +2,7 @@
  * SessionInfo model
  */
 
-import mongoose, { Schema, Model } from 'mongoose'
+import mongoose, { Schema, Model, Document } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
 import { SessionInfoDoc } from '@interfaces/session'
@@ -18,7 +18,8 @@ mongoose.connect(
   printLog(err.name, err.message, 3)
 })
 
-const SessionInfoSchema = new Schema({
+// Create session information schema
+const SessionInfoSchema: Schema = new Schema({
   sessionId: {
     type: String,
     required: true

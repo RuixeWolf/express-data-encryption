@@ -18,7 +18,7 @@ mongoose.connect(
   printLog(err.name, err.message, 3)
 })
 
-// Create user info schema
+// Create user information schema
 const UserInfoSchema: Schema = new Schema({
   userId: {
     type: String,
