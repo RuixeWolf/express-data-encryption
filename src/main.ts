@@ -1,5 +1,5 @@
 /**
- * Main server app entrance
+ * Main service app entrance
  */
 
 // Register module alias
@@ -12,6 +12,7 @@ import staticFiles from './static'
 import router from './router'
 import { serverErrorHandler } from './serverError'
 import { printLog } from '@utils/printLog'
+import { getLocalIP } from '@utils/getIP'
 
 // Create Express app
 const app: Express = express()
@@ -28,8 +29,9 @@ app.use(router)
 // Register internal server error
 app.use(serverErrorHandler())
 
-// Start http service
+// Start HTTP service
 app.listen(serverConfig.port, () => {
+  const host: string = getLocalIP() || 'localhost'
   console.clear()
-  printLog('Service is running at', `http://localhost:${serverConfig.port}/`, 0)
+  printLog('Service is running at', `http://${host}:${serverConfig.port}/`, 0)
 })
