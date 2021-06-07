@@ -570,14 +570,14 @@ export function modifyPassword (): SessionRequestHandler {
 
     // 验证旧密码解密结果
     if (!reqData.oldPassword) {
-      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(2)
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(3)
       res.json(resData)
       return
     }
 
     // 验证新密码解密结果
     if (!reqData.newPassword) {
-      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(3)
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(4)
       res.json(resData)
       return
     }
@@ -603,14 +603,14 @@ export function modifyPassword (): SessionRequestHandler {
     // 验证用户旧密码
     const encryptedUserOldPassword: string = MD5(reqData.oldPassword).toString()
     if (!userPasswordDoc.password || encryptedUserOldPassword !== userPasswordDoc.password) {
-      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(2)
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(3)
       res.json(resData)
       return
     }
 
     // 验证新密码有效性
     if (!reqData.newPassword || reqData.newPassword.length < 6) {
-      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(3)
+      const resData: ModifyUserPaswdRes = view.getModifyUserPaswdResData(4)
       res.json(resData)
       return
     }
@@ -677,7 +677,7 @@ export function accountCancellation (): SessionRequestHandler {
 
     // 验证旧密码解密结果
     if (!reqData.password) {
-      const resData: AccountCancellationRes = view.getAccountCancellationRes(2)
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(3)
       res.json(resData)
       return
     }
@@ -703,7 +703,7 @@ export function accountCancellation (): SessionRequestHandler {
     // 验证密码
     const encryptedUserPassword: string = MD5(reqData.password).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
-      const resData: AccountCancellationRes = view.getAccountCancellationRes(2)
+      const resData: AccountCancellationRes = view.getAccountCancellationRes(3)
       res.json(resData)
       return
     }

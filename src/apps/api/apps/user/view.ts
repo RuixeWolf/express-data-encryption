@@ -250,8 +250,9 @@ export function getEditUserInfoResData (statusCode?: number, data?: EditUserInfo
  * Get modify user password response data
  * @param {number} [statusCode = 0] - Modify user password status code
  * + 1: 密码修改成功
- * + 2: 用户不存在或旧密码无效
- * + 3: 新密码无效
+ * + 2: 用户不存在
+ * + 3: 旧密码无效
+ * + 4: 新密码无效
  * @returns {ModifyUserPaswdRes} Modify user password response data
  */
 export function getModifyUserPaswdResData (statusCode?: number): ModifyUserPaswdRes {
@@ -269,13 +270,18 @@ export function getModifyUserPaswdResData (statusCode?: number): ModifyUserPaswd
       resData.message = '密码已更改'
       resData.success = true
       return resData
-    
+
     case 2:
-      // 用户不存在或旧密码无效
-      resData.message = '用户不存在或旧密码不正确'
+      // 用户不存在
+      resData.message = '用户不存在'
       return resData
-    
+
     case 3:
+      // 旧密码无效
+      resData.message = '旧密码有误'
+      return resData
+
+    case 4:
       // 新密码无效
       resData.message = '新密码无效'
       return resData
@@ -291,7 +297,8 @@ export function getModifyUserPaswdResData (statusCode?: number): ModifyUserPaswd
  * Get user account cancellation response
  * @param {number} statusCode - Account cancellation satus code
  * + 1: 账号注销成功
- * + 2: 用户不存在或密码无效
+ * + 2: 用户不存在
+ * + 3: 密码无效
  * @param {unknown} data - Account cancellation data
  * @returns {AccountCancellationRes} User account cancellation response
  */
@@ -314,8 +321,13 @@ export function getAccountCancellationRes (statusCode?: number, data?: unknown):
       return resData
     
     case 2:
-      // 用户不存在或密码无效
-      resData.message = '用户不存在或密码不正确'
+      // 用户不存在
+      resData.message = '用户不存在'
+      return resData
+
+    case 3:
+      // 密码无效
+      resData.message = '密码有误'
       return resData
 
     default:
