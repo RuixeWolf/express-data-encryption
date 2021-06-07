@@ -6,7 +6,7 @@
 import 'module-alias/register'
 
 import express, { Express } from 'express'
-import * as serverConfig from './configs/server'
+import * as serviceConfig from './configs/service'
 import middlewares from './publicMiddlewares'
 import staticFiles from './static'
 import router from './router'
@@ -30,8 +30,8 @@ app.use(router)
 app.use(serverErrorHandler())
 
 // Start HTTP service
-app.listen(serverConfig.port, () => {
+app.listen(serviceConfig.port, () => {
   const host: string = getLocalIP() || 'localhost'
   console.clear()
-  printLog('Service is running at', `http://${host}:${serverConfig.port}/`, 0)
+  printLog('Service is running at', `http://${host}:${serviceConfig.port}/`, 0)
 })
