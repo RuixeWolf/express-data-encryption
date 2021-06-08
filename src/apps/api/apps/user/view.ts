@@ -28,12 +28,7 @@ import {
  * @param {UserInfoDoc | unknown} [data = {}] - Registration data
  * @returns {UserRegisterRes} User register response data
  */
-export function getUserRegResData (statusCode?: number, data?: UserInfoDoc | unknown): UserRegisterRes {
-  // Set status code
-  statusCode = statusCode || 0
-  // Set data
-  data = data || {}
-
+export function getUserRegResData (statusCode: number = 0, data: UserInfoDoc | unknown = {}): UserRegisterRes {
   // Init res data
   let userRegResData: UserRegisterRes = {
     message: '',
@@ -90,10 +85,7 @@ export function getUserRegResData (statusCode?: number, data?: UserInfoDoc | unk
  * @param {unknown} [data = {}] - Login data
  * @returns User login response data
  */
-export function getUserLoginResData (statusCode?: number, data?: unknown): UserLoginRes {
-  statusCode = statusCode || 0
-  data = data || {}
-
+export function getUserLoginResData (statusCode: number = 0, data: unknown = {}): UserLoginRes {
   let userLoginResData: UserLoginRes = {
     message: '',
     success: false,
@@ -125,13 +117,10 @@ export function getUserLoginResData (statusCode?: number, data?: unknown): UserL
  * @param {number} [statusCode = 0] - Get user information status code
  * + 1: 获取用户信息成功
  * + 2: 用户不存在
- * @param {UserInfoResData | unknown} data - User information data
+ * @param {UserInfoResData | unknown} [data = {}] - User information data
  * @returns {UserInfoRes} User information response data
  */
-export function getUserInfoResData (statusCode?: number, data?: GetUserInfoResData | unknown): GetUserInfoRes {
-  statusCode = statusCode || 0
-  data = data || {}
-
+export function getUserInfoResData (statusCode: number = 0, data: GetUserInfoResData | unknown = {}): GetUserInfoRes {
   let resData: GetUserInfoRes = {
     message: '',
     success: false,
@@ -163,13 +152,10 @@ export function getUserInfoResData (statusCode?: number, data?: GetUserInfoResDa
  * @param {number} [statusCode = 0] - User logout status code
  * + 1: 退出登录成功
  * + 2: 用户不存在
- * @param {unknown} data - User logout data
+ * @param {unknown} [data = {}] - User logout data
  * @returns {UserLogoutRes} User logout response data
  */
-export function getUserLogoutResData (statusCode?: number, data?: unknown): UserLogoutRes {
-  statusCode = statusCode || 0
-  data = data || {}
-
+export function getUserLogoutResData (statusCode: number = 0, data: unknown = {}): UserLogoutRes {
   let resData: UserLogoutRes = {
     message: '',
     success: false,
@@ -203,13 +189,10 @@ export function getUserLogoutResData (statusCode?: number, data?: unknown): User
  * + 2: 用户不存在
  * + 3: 邮箱无效
  * + 4: 手机号无效
- * @param {EditUserInfoResData | unknown} data - User information data
+ * @param {EditUserInfoResData | unknown} [data = {}] - User information data
  * @returns {EditUserInfoRes} Edit user information response data
  */
-export function getEditUserInfoResData (statusCode?: number, data?: EditUserInfoResData | unknown): EditUserInfoRes {
-  statusCode = statusCode || 0
-  data = data || {}
-
+export function getEditUserInfoResData (statusCode: number = 0, data: EditUserInfoResData | unknown = {}): EditUserInfoRes {
   let resData: EditUserInfoRes = {
     message: '',
     success: false,
@@ -255,9 +238,7 @@ export function getEditUserInfoResData (statusCode?: number, data?: EditUserInfo
  * + 4: 新密码无效
  * @returns {ModifyUserPaswdRes} Modify user password response data
  */
-export function getModifyUserPaswdResData (statusCode?: number): ModifyUserPaswdRes {
-  statusCode = statusCode || 0
-
+export function getModifyUserPaswdResData (statusCode: number = 0): ModifyUserPaswdRes {
   let resData: ModifyUserPaswdRes = {
     message: '',
     success: false,
@@ -295,17 +276,14 @@ export function getModifyUserPaswdResData (statusCode?: number): ModifyUserPaswd
 
 /**
  * Get user account cancellation response
- * @param {number} statusCode - Account cancellation satus code
+ * @param {number} [statusCode = 0] - Account cancellation satus code
  * + 1: 账号注销成功
  * + 2: 用户不存在
  * + 3: 密码无效
- * @param {unknown} data - Account cancellation data
+ * @param {unknown} [data = {}] - Account cancellation data
  * @returns {AccountCancellationRes} User account cancellation response
  */
-export function getAccountCancellationRes (statusCode?: number, data?: unknown): AccountCancellationRes {
-  statusCode = statusCode || 0
-  data = data || {}
-
+export function getAccountCancellationRes (statusCode: number = 0, data: unknown = {}): AccountCancellationRes {
   let resData: AccountCancellationRes = {
     message: '',
     success: false,

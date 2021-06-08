@@ -7,10 +7,7 @@
  * @param {string} [language = 'en'] - User language preference
  * @returns {string} Internal server error response message
  */
-export function getErrMsg (language?: string): string {
-  // Set language
-  language = language || 'en'
-
+export function getErrMsg (language: string = 'en'): string {
   // Init res data
   let errMsg: string = '500 Internal Server Error'
 

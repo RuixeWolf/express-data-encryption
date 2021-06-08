@@ -10,10 +10,8 @@ import chalk from 'chalk'
  * + 2: Warning
  * + 3: Error
  */
-export function printLog (message: string, detail?: string, level?: number): void {
+export function printLog (message: string, detail: string = '', level: number = 0): void {
   // Init data
-  detail = detail || ''
-  level = level || 0
   let messageType: string
   const timeStr: string = `[${new Date().toLocaleTimeString()}]`
 

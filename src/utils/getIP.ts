@@ -5,8 +5,7 @@ import { networkInterfaces } from 'os'
  * @param {'IPv4' | 'IPv6'} [family = 'IPv4'] - IP family
  * @returns {string | null} Local IP address
  */
-export function getLocalIP (family?: 'IPv4' | 'IPv6'): string | null {
-  family = family || 'IPv4'
+export function getLocalIP (family: 'IPv4' | 'IPv6' = 'IPv4'): string | null {
   const interfaces = networkInterfaces()
   for (const interfaceName in interfaces) {
     const interfaceInfo = interfaces[interfaceName]

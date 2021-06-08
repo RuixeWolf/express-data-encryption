@@ -7,9 +7,8 @@
  * @param {string} [prefix = ''] - ID prefix
  * @returns {string} Prefix with 20-bit hex string
  */
-export function generateId (prefix?: string): string {
+export function generateId (prefix: string = ''): string {
   let id: string = ''
-  prefix = prefix || ''
   // Generate 11-bit hex timestamp string
   const currentTime: number = Date.now()
   const currentTimeStr: string = currentTime.toString(16)
@@ -24,9 +23,8 @@ export function generateId (prefix?: string): string {
  * @param {number} [length = 10] - Account number length
  * @returns {string} Account number string
  */
-export function generateAccount (length?: number): string {
+export function generateAccount (length: number = 10): string {
   let userAccount: string = ''
-  length = length || 10
   const randomInt: number = parseInt(Math.random().toString().substr(2))
   userAccount = randomInt.toString().substr(2, length)
   if (userAccount.length < length) {

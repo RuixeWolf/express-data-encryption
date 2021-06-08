@@ -12,9 +12,7 @@ import { JsonRes } from '@interfaces/resBody'
  * + 10003: Token 过期
  * @returns {JsonRes} Verify session response data
  */
-export function verifySessionRes (statusCode?: number): JsonRes {
-  statusCode = statusCode || 10000
-
+export function verifySessionRes (statusCode: number = 10000): JsonRes {
   let resData: JsonRes = {
     message: '',
     success: false,
@@ -39,6 +37,7 @@ export function verifySessionRes (statusCode?: number): JsonRes {
     
     default:
       resData.message = 'Access denied'
+      resData.statusCode = 10000
       return resData
   }
 }
