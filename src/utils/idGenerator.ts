@@ -26,7 +26,7 @@ export function generateId (prefix: string = ''): string {
 export function generateAccount (length: number = 10): string {
   let userAccount: string = ''
   const randomInt: number = parseInt(Math.random().toString().substr(2))
-  userAccount = randomInt.toString().substr(2, length)
+  userAccount = randomInt.toString().substr(0, length)
   if (userAccount.length < length) {
     userAccount = userAccount + '0'.repeat(length - userAccount.length)
   }
