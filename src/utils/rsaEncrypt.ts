@@ -2,13 +2,14 @@
  * RSA encrypt util
  */
 
-import path from 'path'
 import fs from 'fs'
 import NodeRSA from 'node-rsa'
+import { pubKeyPath, privKeyPath } from '@configs/rsaKeys'
+import { printLog } from '@utils/printLog'
 
 // Set RSA key paths
-const publicKeyPath: string = path.join(__dirname, './keys/rsa_1024_pub.pem')
-const privateKeyPath: string = path.join(__dirname, './keys/rsa_1024_priv.pem')
+const publicKeyPath: string = pubKeyPath
+const privateKeyPath: string = privKeyPath
 
 /**
  * RSA encrypt
@@ -23,6 +24,8 @@ export function rsaEncrypt (content: string): string {
     const encryptRes: string = nodeRsa.encrypt(content, 'base64')
     return encryptRes
   } catch (error) {
+    const err: Error = error as Error
+    printLog(`${err.name}:` || 'Error:', err.message, 3)
     return ''
   }
 }
@@ -40,6 +43,8 @@ export function rsaDecrypt (content: string): string {
     const decryptRes: string = nodeRsa.decrypt(content, 'utf8')
     return decryptRes
   } catch (error) {
+    const err: Error = error as Error
+    printLog(`${err.name}:` || 'Error:', err.message, 3)
     return ''
   }
 }
@@ -53,6 +58,8 @@ export function getPublicKey (): string {
     const publicKeyContent: string = fs.readFileSync(publicKeyPath).toString('utf8')
     return publicKeyContent
   } catch (error) {
+    const err: Error = error as Error
+    printLog(`${err.name}:` || 'Error:', err.message, 3)
     return ''
   }
 }
@@ -66,6 +73,8 @@ export function getPrivateKey (): string {
     const privateKeyContent: string = fs.readFileSync(privateKeyPath).toString('utf8')
     return privateKeyContent
   } catch (error) {
+    const err: Error = error as Error
+    printLog(`${err.name}:` || 'Error:', err.message, 3)
     return ''
   }
 }

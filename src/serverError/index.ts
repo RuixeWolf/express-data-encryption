@@ -13,16 +13,15 @@ import { printLog } from '@utils/printLog'
 export function serverErrorHandler (): ErrorRequestHandler {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err) {
-      // Print error
-      printLog(err.name || '500 Internal Server Error', err.message, 3)
+      // Print error log
+      printLog(`${err.name}:` || 'Error:', err.message, 3)
 
       // Response HTTP 500
       const userLanguages: string[] = req.acceptsLanguages()
       const errMsg: string = view.getErrMsg(userLanguages[0])
       res.status(500)
       res.send(errMsg)
-    } else {
-      next(err)
     }
+    next(err)
   }
 }

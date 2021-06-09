@@ -4,6 +4,7 @@
 
 import AES from 'crypto-js/aes'
 import encUtf8 from 'crypto-js/enc-utf8'
+import { printLog } from '@utils/printLog'
 
 // Set secret key
 const secretKey: string = 'jhvi@u3*7s%ia93gtyhbs^as@17'
@@ -18,6 +19,8 @@ export function generateToken (sessionId: string): string {
     const token: string = AES.encrypt(sessionId, secretKey).toString()
     return token
   } catch (error) {
+    const err: Error = error as Error
+    printLog(`${err.name}:` || 'Error:', err.message, 3)
     return ''
   }
 }
@@ -32,6 +35,8 @@ export function parseToken (token: string): string {
     const sessionId: string = AES.decrypt(token, secretKey).toString(encUtf8)
     return sessionId
   } catch (error) {
+    const err: Error = error as Error
+    printLog(`${err.name}:` || 'Error:', err.message, 3)
     return ''
   }
 }
