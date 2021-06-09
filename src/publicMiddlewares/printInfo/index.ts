@@ -9,7 +9,7 @@ export function printReqInfo (): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     const method: string = req.method
     const originalUrl: string = req.originalUrl
-    printLog(method, originalUrl, 0)
+    printLog(`[${req.ip}]`, `${method} ${originalUrl}`, 0)
     next()
   }
 }

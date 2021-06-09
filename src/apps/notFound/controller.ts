@@ -15,7 +15,7 @@ export function notFound (): RequestHandler {
     // Print HTTP 404 log
     const method: string = req.method
     const originalUrl: string = req.originalUrl
-    printLog(`Cannot ${method}`, originalUrl, 2)
+    printLog(`[${req.ip}]`, `Cannot ${method} ${originalUrl}`, 2)
 
     // Response HTTP 404
     res.status(404)
