@@ -9,13 +9,8 @@
     "start": "ts-node ./src/main.ts",
     "build": "tsc --project ./"
   },
-  "keywords": [
-    "express",
-    "typescript",
-    "encryption"
-  ],
-  "author": "",
-  "license": "ISC",
+  "author": "RuixeWolf",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "chalk": "^4.1.1",
