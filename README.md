@@ -6,6 +6,27 @@
 
 ## 项目运行
 
+### 生成 RSA 私钥与公钥
+
+```shell
+mkdir keys && cd keys
+openssl genrsa -out rsa_1024_priv.pem 1024
+openssl rsa -pubout -in rsa_1024_priv.pem -out rsa_1024_pub.pem
+```
+
+### 添加前端应用
+
+```shell
+mkdir frontendApp
+cp /path/to/frontendProject/dist/* ./frontendApp
+```
+
+### 添加静态文件目录
+
+```shell
+mkdir static
+```
+
 ### 安装依赖
 
 ```shell
