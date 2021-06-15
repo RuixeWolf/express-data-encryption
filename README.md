@@ -4,6 +4,11 @@
 
 实现常用的用户操作场景所涉及的重点数据加密功能，项目是基于 Nodejs Express 框架，使用 TypeScript 开发的 MVC 架构后端服务
 
+## 前端项目
+
+- [GitHub](https://github.com/RuixeWolf/vue-data-encryption)
+- [Gitee](https://gitee.com/RuixeWolf/vue-data-encryption)
+
 ## 项目运行
 
 ### 生成 RSA 私钥与公钥
@@ -25,6 +30,12 @@ cp /path/to/frontendProject/dist/* ./frontendApp
 
 ```shell
 mkdir static
+```
+
+### 配置数据库
+
+```shell
+code ./src/configs/mongodb.ts
 ```
 
 ### 安装依赖
