@@ -6,6 +6,6 @@ import { ServeStaticOptions } from 'serve-static'
 
 export interface StaticFileConfig {
   urlPath: string
-  folderPsth: string
+  folderPath: string
   options?: ServeStaticOptions
 }

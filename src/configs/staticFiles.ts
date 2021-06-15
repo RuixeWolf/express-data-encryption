@@ -12,13 +12,13 @@ export const staticFileConfigs: Array<StaticFileConfig> = [
   // Default static files config
   {
     urlPath: '/static',
-    folderPsth: path.join(__dirname, '../../static')
+    folderPath: path.join(__dirname, '../../static')
   },
 
   // Frontend app files config
   {
     urlPath: '',
-    folderPsth: path.join(__dirname, '../../frontendApp'),
+    folderPath: path.join(__dirname, '../../frontendApp'),
     options: {
       index: 'index.html'
     }

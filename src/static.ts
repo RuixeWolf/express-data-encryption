@@ -10,7 +10,7 @@ const app: Express = epxress()
 for (const staticFileConfig of staticFileConfigs) {
   app.use(
     staticFileConfig.urlPath,
-    expressStatic(staticFileConfig.folderPsth, staticFileConfig.options)
+    expressStatic(staticFileConfig.folderPath, staticFileConfig.options)
   )
 }
 
