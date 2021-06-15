@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon --config ./nodemon.json ./src/main.ts",
     "start": "ts-node ./src/main.ts",
-    "build": "tsc --project ./"
+    "build": "node ./builder/main.js"
   },
   "author": "RuixeWolf",
   "license": "MIT",
