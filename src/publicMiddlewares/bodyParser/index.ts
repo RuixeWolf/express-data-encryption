@@ -3,14 +3,14 @@
  */
 
 import express, { Express } from 'express'
-import bodyParser from 'body-parser'
+import { urlencoded, json } from 'body-parser'
 
 const app: Express = express()
 
 // Parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(urlencoded({ extended: false }))
 
 // Parse application/json
-app.use(bodyParser.json())
+app.use(json())
 
 export default app
