@@ -37,6 +37,7 @@ function duplicateFiles () {
   // 复制目录或文件
   for (const file of fileList) {
     const src = path.join(__dirname, '../', file)
+    if (!fs.existsSync(src)) continue
     const dest = path.join(__dirname, '../dist', file)
     copyFile.copySync(src, dest)
   }

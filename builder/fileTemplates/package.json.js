@@ -14,6 +14,5 @@ module.exports = {
   scripts: {
     start: 'node ./src/main.js'
   },
-  dependencies: packageConfig.dependencies,
   _moduleAliases: packageConfig._moduleAliases
 }

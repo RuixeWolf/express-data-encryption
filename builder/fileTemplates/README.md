@@ -1,13 +1,5 @@
 ## 项目运行
 
-### 安装依赖
-
-```shell
-npm install
-```
-
-### 启动服务
-
 ```shell
 npm run start
 ```

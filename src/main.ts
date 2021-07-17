@@ -12,7 +12,6 @@ import staticFiles from './static'
 import router from './router'
 import { serverErrorHandler } from './serverError'
 import { printLog } from '@utils/printLog'
-import internalIp from 'internal-ip'
 
 // Create Express app
 const app: Express = express()
@@ -31,7 +30,6 @@ app.use(serverErrorHandler())
 
 // Start HTTP service
 app.listen(serviceConfig.port, () => {
-  const host: string = internalIp.v4.sync() || 'localhost'
   console.clear()
-  printLog('Service is running at', `http://${host}:${serviceConfig.port}/`, 0)
+  printLog('Service is running at', `http://localhost:${serviceConfig.port}/`, 0)
 })
