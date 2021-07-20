@@ -20,7 +20,7 @@ export function rsaEncrypt (content: string): string {
   try {
     const publicKeyContent: string = fs.readFileSync(publicKeyPath).toString('utf8')
     const nodeRsa = new NodeRSA(publicKeyContent)
-    nodeRsa.setOptions({ encryptionScheme: 'pkcs1'})
+    nodeRsa.setOptions({ encryptionScheme: 'pkcs1' })
     const encryptRes: string = nodeRsa.encrypt(content, 'base64')
     return encryptRes
   } catch (error) {
@@ -39,7 +39,7 @@ export function rsaDecrypt (content: string): string {
   try {
     const privateKeyContent: string = fs.readFileSync(privateKeyPath).toString('utf8')
     const nodeRsa = new NodeRSA(privateKeyContent)
-    nodeRsa.setOptions({ encryptionScheme: 'pkcs1'})
+    nodeRsa.setOptions({ encryptionScheme: 'pkcs1' })
     const decryptRes: string = nodeRsa.decrypt(content, 'utf8')
     return decryptRes
   } catch (error) {

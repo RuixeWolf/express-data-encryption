@@ -13,7 +13,7 @@ import { JsonRes } from '@interfaces/resBody'
  * @returns {JsonRes} Verify session response data
  */
 export function verifySessionRes (statusCode: number = 10000): JsonRes {
-  let resData: JsonRes = {
+  const resData: JsonRes = {
     message: '',
     success: false,
     statusCode
@@ -34,7 +34,7 @@ export function verifySessionRes (statusCode: number = 10000): JsonRes {
       // Token 过期
       resData.message = 'Token is expired'
       return resData
-    
+
     default:
       resData.message = 'Access denied'
       resData.statusCode = 10000

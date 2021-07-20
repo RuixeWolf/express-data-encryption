@@ -7,7 +7,7 @@ import { JsonRes } from '@interfaces/resBody'
 /**
  * User information MongoDB document
  */
- export interface UserInfoDoc {
+export interface UserInfoDoc {
   userId: string
   userAccount: string
   userName: string

@@ -24,7 +24,7 @@ router.post('/login', controller.login())
  * $route GET /api/user/logout
  * @access private
  */
- router.get(
+router.get(
   '/logout',
   // 先调用验证会话信息中间件
   verifySession() as RequestHandler,
@@ -45,7 +45,7 @@ router.get(
  * $route POST /api/user/info
  * @access private
  */
- router.post(
+router.post(
   '/info',
   verifySession() as RequestHandler,
   controller.editInfo() as RequestHandler
@@ -55,7 +55,7 @@ router.get(
  * $route POST /api/user/modifypassword
  * @access private
  */
- router.post(
+router.post(
   '/modifypassword',
   verifySession() as RequestHandler,
   controller.modifyPassword() as RequestHandler
@@ -66,7 +66,7 @@ router.get(
  * @description User account cancellation
  * @access private
  */
- router.post(
+router.post(
   '/cancellation',
   verifySession() as RequestHandler,
   controller.accountCancellation() as RequestHandler

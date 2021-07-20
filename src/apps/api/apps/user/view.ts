@@ -30,7 +30,7 @@ import {
  */
 export function getUserRegResData (statusCode: number = 0, data: UserInfoDoc | unknown = {}): UserRegisterRes {
   // Init res data
-  let userRegResData: UserRegisterRes = {
+  const userRegResData: UserRegisterRes = {
     message: '',
     success: false,
     statusCode,
@@ -59,7 +59,7 @@ export function getUserRegResData (statusCode: number = 0, data: UserInfoDoc | u
       // 密码无效
       userRegResData.message = '密码无效'
       return userRegResData
-    
+
     case 5:
       // 邮箱无效
       userRegResData.message = '邮箱格式有误'
@@ -69,7 +69,7 @@ export function getUserRegResData (statusCode: number = 0, data: UserInfoDoc | u
       // 手机号无效
       userRegResData.message = '手机号格式有误'
       return userRegResData
-      
+
     default:
       userRegResData.message = '注册失败'
       userRegResData.statusCode = 0
@@ -86,7 +86,7 @@ export function getUserRegResData (statusCode: number = 0, data: UserInfoDoc | u
  * @returns User login response data
  */
 export function getUserLoginResData (statusCode: number = 0, data: unknown = {}): UserLoginRes {
-  let userLoginResData: UserLoginRes = {
+  const userLoginResData: UserLoginRes = {
     message: '',
     success: false,
     statusCode,
@@ -121,7 +121,7 @@ export function getUserLoginResData (statusCode: number = 0, data: unknown = {})
  * @returns {UserInfoRes} User information response data
  */
 export function getUserInfoResData (statusCode: number = 0, data: GetUserInfoResData | unknown = {}): GetUserInfoRes {
-  let resData: GetUserInfoRes = {
+  const resData: GetUserInfoRes = {
     message: '',
     success: false,
     statusCode,
@@ -156,7 +156,7 @@ export function getUserInfoResData (statusCode: number = 0, data: GetUserInfoRes
  * @returns {UserLogoutRes} User logout response data
  */
 export function getUserLogoutResData (statusCode: number = 0, data: unknown = {}): UserLogoutRes {
-  let resData: UserLogoutRes = {
+  const resData: UserLogoutRes = {
     message: '',
     success: false,
     statusCode,
@@ -193,7 +193,7 @@ export function getUserLogoutResData (statusCode: number = 0, data: unknown = {}
  * @returns {EditUserInfoRes} Edit user information response data
  */
 export function getEditUserInfoResData (statusCode: number = 0, data: EditUserInfoResData | unknown = {}): EditUserInfoRes {
-  let resData: EditUserInfoRes = {
+  const resData: EditUserInfoRes = {
     message: '',
     success: false,
     statusCode,
@@ -239,7 +239,7 @@ export function getEditUserInfoResData (statusCode: number = 0, data: EditUserIn
  * @returns {ModifyUserPaswdRes} Modify user password response data
  */
 export function getModifyUserPaswdResData (statusCode: number = 0): ModifyUserPaswdRes {
-  let resData: ModifyUserPaswdRes = {
+  const resData: ModifyUserPaswdRes = {
     message: '',
     success: false,
     statusCode
@@ -284,20 +284,20 @@ export function getModifyUserPaswdResData (statusCode: number = 0): ModifyUserPa
  * @returns {AccountCancellationRes} User account cancellation response
  */
 export function getAccountCancellationRes (statusCode: number = 0, data: unknown = {}): AccountCancellationRes {
-  let resData: AccountCancellationRes = {
+  const resData: AccountCancellationRes = {
     message: '',
     success: false,
     statusCode,
     data
   }
 
-  switch(statusCode) {
+  switch (statusCode) {
     case 1:
       // 账号注销成功
       resData.message = '账号已注销'
       resData.success = true
       return resData
-    
+
     case 2:
       // 用户不存在
       resData.message = '用户不存在'

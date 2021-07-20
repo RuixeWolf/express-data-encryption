@@ -11,7 +11,7 @@ import { GetPubKeyRes } from './interface'
  */
 export function getRsaPubKeyRes (rsaPubKey: string): GetPubKeyRes {
   // Init default response data
-  let getPubKeyRes: GetPubKeyRes = {
+  const getPubKeyRes: GetPubKeyRes = {
     message: 'fail',
     success: false,
     statusCode: 0,
@@ -27,6 +27,6 @@ export function getRsaPubKeyRes (rsaPubKey: string): GetPubKeyRes {
     getPubKeyRes.data.pubKey = rsaPubKey
     return getPubKeyRes
   }
-  
+
   return getPubKeyRes
 }

@@ -76,7 +76,7 @@ export function register (): RequestHandler {
 
     // 用户名查重
     try {
-      if (await UserInfoModel.findOne({userName: reqData.userName})) {
+      if (await UserInfoModel.findOne({ userName: reqData.userName })) {
         const resData: UserRegisterRes = view.getUserRegResData(3)
         res.json(resData)
         return
@@ -125,7 +125,7 @@ export function register (): RequestHandler {
       next(error)
       return
     }
-    
+
     // 生成账号并查重
     let userAccount: string = generateAccount(10)
     try {
@@ -191,7 +191,6 @@ export function register (): RequestHandler {
     // Default case
     const defaultResData: UserRegisterRes = view.getUserRegResData()
     res.json(defaultResData)
-    return
   }
 }
 
@@ -215,7 +214,7 @@ export function login (): RequestHandler {
     }
 
     /** 查询数据 */
-    
+
     // 初始化用户 ID
     let userId: string = ''
 
@@ -336,7 +335,6 @@ export function login (): RequestHandler {
 
     const defaultResData: UserLoginRes = view.getUserLoginResData()
     res.json(defaultResData)
-    return
   }
 }
 
@@ -380,7 +378,6 @@ export function logout (): SessionRequestHandler {
 
     const defaultResData: UserLogoutRes = view.getUserLogoutResData()
     res.json(defaultResData)
-    return
   }
 }
 
@@ -437,7 +434,6 @@ export function getInfo (): SessionRequestHandler {
 
     const defaultResData: GetUserInfoRes = view.getUserInfoResData()
     res.json(defaultResData)
-    return
   }
 }
 
@@ -482,7 +478,7 @@ export function editInfo (): SessionRequestHandler {
     // 生成需要更新的数据
     const currentTime: Date = new Date()
     const modifiedTime: string = currentTime.toISOString()
-    let userInfoUpdateData: EditUserInfoFields = {
+    const userInfoUpdateData: EditUserInfoFields = {
       modifiedTime
     }
 
@@ -512,7 +508,7 @@ export function editInfo (): SessionRequestHandler {
       next(error)
       return
     }
-    
+
     // 用户不存在
     if (!userInfoUpdateRes) {
       const resData: EditUserInfoRes = view.getEditUserInfoResData(2)
@@ -542,7 +538,6 @@ export function editInfo (): SessionRequestHandler {
 
     const defaultResData: EditUserInfoRes = view.getEditUserInfoResData()
     res.json(defaultResData)
-    return
   }
 }
 
@@ -650,7 +645,6 @@ export function modifyPassword (): SessionRequestHandler {
 
     const defaultResData: ModifyUserPaswdRes = view.getModifyUserPaswdResData()
     res.json(defaultResData)
-    return
   }
 }
 
@@ -759,6 +753,5 @@ export function accountCancellation (): SessionRequestHandler {
 
     const defaultResData: AccountCancellationRes = view.getAccountCancellationRes()
     res.json(defaultResData)
-    return
   }
 }

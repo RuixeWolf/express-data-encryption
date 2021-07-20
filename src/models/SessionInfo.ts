@@ -2,7 +2,7 @@
  * SessionInfo model
  */
 
-import mongoose, { Schema, Model, Document } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
 import { SessionInfoDoc } from '@interfaces/session'
