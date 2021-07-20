@@ -31,5 +31,5 @@ app.use(serverErrorHandler())
 // Start HTTP service
 app.listen(serviceConfig.port, () => {
   console.clear()
-  printLog('Service is running at', `http://localhost:${serviceConfig.port}/`, 0)
+  printLog('Service is running at', `http://localhost:${serviceConfig.port}`, 0)
 })
