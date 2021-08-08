@@ -5,8 +5,8 @@
 import { Router } from 'express'
 
 // Import app's router
-import apiAppRouter from '@apps/api/router'
-import notFoundAppRouter from '@apps/notFound/router'
+import apiAppRouter from '@/apps/api/routers'
+import notFoundAppRouter from '@/apps/notFound/routers'
 
 const router: Router = Router()
 

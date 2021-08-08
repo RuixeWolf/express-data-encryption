@@ -9,7 +9,7 @@ import express, { Express } from 'express'
 import * as serviceConfig from './configs/service'
 import middlewares from './publicMiddlewares'
 import staticFiles from './static'
-import router from './router'
+import router from './routers'
 import { serverErrorHandler } from './serverError'
 import { printLog } from '@utils/printLog'
 

@@ -6,7 +6,7 @@ import { Response, NextFunction } from 'express'
 import { SessionRequestHandler, SessionRequest, SessionInfoDoc } from '@interfaces/session'
 import { parseToken } from '@utils/sessionToken'
 import SessionInfoModel from '@models/SessionInfo'
-import * as view from './view'
+import * as view from './views'
 import { JsonRes } from '@interfaces/resBody'
 import { Document } from 'mongoose'
 

@@ -1,8 +1,8 @@
 /**
- * App view
+ * App views
  */
 
-import { GetPubKeyRes } from './interface'
+import { GetPubKeyRes } from './interfaces'
 
 /**
  * Get RSA public key response data

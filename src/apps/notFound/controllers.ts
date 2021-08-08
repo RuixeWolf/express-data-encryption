@@ -1,5 +1,5 @@
 /**
- * App controller
+ * App controllers
  */
 
 import { RequestHandler, Request, Response } from 'express'

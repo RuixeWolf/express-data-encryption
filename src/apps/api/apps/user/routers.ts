@@ -1,9 +1,9 @@
 /**
- * App router
+ * App routers
  */
 
 import { Router, RequestHandler } from 'express'
-import * as controller from './controller'
+import * as controllers from './controllers'
 import { verifySession } from '@/privateMiddlewares/verifySession'
 
 const router: Router = Router()
@@ -12,13 +12,13 @@ const router: Router = Router()
  * $route POST /api/user/register
  * @access public
  */
-router.post('/register', controller.register())
+router.post('/register', controllers.register())
 
 /**
  * $route POST /api/user/login
  * @access public
  */
-router.post('/login', controller.login())
+router.post('/login', controllers.login())
 
 /**
  * $route GET /api/user/logout
@@ -28,7 +28,7 @@ router.get(
   '/logout',
   // 先调用验证会话信息中间件
   verifySession() as RequestHandler,
-  controller.logout() as RequestHandler
+  controllers.logout() as RequestHandler
 )
 
 /**
@@ -38,7 +38,7 @@ router.get(
 router.get(
   '/info',
   verifySession() as RequestHandler,
-  controller.getInfo() as RequestHandler
+  controllers.getInfo() as RequestHandler
 )
 
 /**
@@ -48,7 +48,7 @@ router.get(
 router.post(
   '/info',
   verifySession() as RequestHandler,
-  controller.editInfo() as RequestHandler
+  controllers.editInfo() as RequestHandler
 )
 
 /**
@@ -58,7 +58,7 @@ router.post(
 router.post(
   '/modifypassword',
   verifySession() as RequestHandler,
-  controller.modifyPassword() as RequestHandler
+  controllers.modifyPassword() as RequestHandler
 )
 
 /**
@@ -69,7 +69,7 @@ router.post(
 router.post(
   '/cancellation',
   verifySession() as RequestHandler,
-  controller.accountCancellation() as RequestHandler
+  controllers.accountCancellation() as RequestHandler
 )
 
 export default router

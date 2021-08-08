@@ -1,5 +1,5 @@
 /**
- * App interface
+ * App interfaces
  */
 
 import { JsonRes } from '@interfaces/resBody'

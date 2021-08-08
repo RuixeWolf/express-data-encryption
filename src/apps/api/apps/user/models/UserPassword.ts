@@ -5,7 +5,7 @@
 import mongoose, { Schema, Model } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
-import { UserPasswordDoc } from '../interface'
+import { UserPasswordDoc } from '../interfaces'
 
 // Connect to MongoDB
 mongoose.connect(

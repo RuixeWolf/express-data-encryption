@@ -1,12 +1,12 @@
 /**
- * App router
+ * App routers
  */
 
 import { Router } from 'express'
 
 // Import app's router
-import userAppRouter from './apps/user/router'
-import rsaKeyAppRouter from './apps/key/router'
+import userAppRouter from './apps/user/routers'
+import rsaKeyAppRouter from './apps/key/routers'
 
 const router: Router = Router()
 

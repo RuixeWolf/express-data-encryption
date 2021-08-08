@@ -1,10 +1,10 @@
 /**
- * App controller
+ * App controllers
  */
 
 import { RequestHandler, Request, Response, NextFunction } from 'express'
-import * as view from './view'
-import { GetPubKeyRes } from './interface'
+import * as view from './views'
+import { GetPubKeyRes } from './interfaces'
 import { getPublicKey } from '@utils/rsaEncrypt'
 
 /**

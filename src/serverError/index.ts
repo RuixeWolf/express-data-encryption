@@ -3,7 +3,7 @@
  */
 
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express'
-import * as view from './view'
+import * as view from './views'
 import { printLog } from '@utils/printLog'
 
 /**
