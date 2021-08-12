@@ -7,6 +7,7 @@ import { UserRegisterReq, UserRegisterRes, UserInfoDoc, UserPasswordDoc } from '
 import UserInfoModel from '../models/UserInfo'
 import UserPasswordModel from '../models/UserPassword'
 import { register as registerView } from '../views'
+import { secretKey } from '@configs/secretKey'
 
 /**
  * User register API controller
@@ -104,8 +105,8 @@ export function register (): RequestHandler {
       return
     }
 
-    // MD5 单向加密密码
-    const password: string = MD5(reqData.password).toString()
+    // MD5 单向加密密码（secretKey + 用户密码）
+    const password: string = MD5(secretKey + reqData.password).toString()
 
     // 生成用户信息文档
     const currentTime: Date = new Date()

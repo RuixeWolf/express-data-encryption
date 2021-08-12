@@ -10,6 +10,7 @@ import { UserLoginReq, UserLoginRes, UserInfoDoc, UserPasswordDoc } from '../int
 import UserInfoModel from '../models/UserInfo'
 import UserPasswordModel from '../models/UserPassword'
 import { login as loginView } from '../views'
+import { secretKey } from '@configs/secretKey'
 
 /**
  * User login API controller
@@ -83,8 +84,8 @@ export function login (): RequestHandler {
       return
     }
 
-    // 验证用户密码
-    const encryptedUserPassword: string = MD5(reqData.password).toString()
+    // 验证用户密码（secretKey + 用户密码）
+    const encryptedUserPassword: string = MD5(secretKey + reqData.password).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
       const resData: UserLoginRes = loginView(2)
       res.json(resData)

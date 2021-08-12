@@ -5,9 +5,7 @@
 import AES from 'crypto-js/aes'
 import encUtf8 from 'crypto-js/enc-utf8'
 import { printLog } from '@utils/printLog'
-
-// Set secret key
-const secretKey: string = 'jhvi@u3*7s%ia93gtyhbs^as@17'
+import { secretKey } from '@configs/secretKey'
 
 /**
  * Generate token from session ID
