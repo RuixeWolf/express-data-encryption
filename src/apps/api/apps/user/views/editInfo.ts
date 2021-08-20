@@ -1,5 +1,13 @@
 import { EditUserInfoResData, EditUserInfoRes } from '../interfaces'
 
+// Exprot status codes
+export const editInfoStatusCodes: Record<string, number> = {
+  EDIT_INFO_SUCCESS: 1,
+  USER_NOT_EXIST: 2,
+  INVALID_EMAIL: 3,
+  INVALID_PHONE: 4
+}
+
 /**
  * Get edit user information response data
  * @param {number} [statusCode = 0] - Edit user information status code

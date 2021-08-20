@@ -7,7 +7,14 @@ import { Document } from 'mongoose'
 import { AccountCancellationRes, AccountCancellationReq, UserPasswordDoc } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
 import UserPasswordModel from '../models/UserPassword'
-import { login as loginView } from '../views'
+import { login as loginView, accountCancellationStatusCodes } from '../views'
+
+// Import status codes
+const {
+  ACCOUNT_CANCELLATION_SUCCESS,
+  USER_NOT_EXIST,
+  INVALID_PASSWORD
+} = accountCancellationStatusCodes
 
 /**
  * User account cancellation API controller
@@ -19,7 +26,7 @@ export function accountCancellation (): SessionRequestHandler {
     const userId: string = req.session.userId
     const sessionId: string = req.session.sessionId
     if (!userId || !sessionId) {
-      const resData: AccountCancellationRes = loginView(2)
+      const resData: AccountCancellationRes = loginView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -32,7 +39,7 @@ export function accountCancellation (): SessionRequestHandler {
 
     // 验证旧密码解密结果
     if (!reqData.password) {
-      const resData: AccountCancellationRes = loginView(3)
+      const resData: AccountCancellationRes = loginView(INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -50,7 +57,7 @@ export function accountCancellation (): SessionRequestHandler {
 
     // 用户不存在
     if (!userPasswordDoc) {
-      const resData: AccountCancellationRes = loginView(2)
+      const resData: AccountCancellationRes = loginView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -58,7 +65,7 @@ export function accountCancellation (): SessionRequestHandler {
     // 验证密码
     const encryptedUserPassword: string = MD5(reqData.password).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
-      const resData: AccountCancellationRes = loginView(3)
+      const resData: AccountCancellationRes = loginView(INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -107,7 +114,7 @@ export function accountCancellation (): SessionRequestHandler {
 
     // 账号注销成功
     if (userInfoDelRes.ok && passwordDelRes.ok && sessionDelRes.ok) {
-      const resData: AccountCancellationRes = loginView(1, cancellationData)
+      const resData: AccountCancellationRes = loginView(ACCOUNT_CANCELLATION_SUCCESS, cancellationData)
       res.json(resData)
       return
     }

@@ -1,5 +1,11 @@
 import { UserLoginRes } from '../interfaces'
 
+// Exprot status codes
+export const loginStatusCodes: Record<string, number> = {
+  LOGIN_SUCCESS: 1,
+  USER_NOT_EXIST_OR_INVALID_PASSWORD: 2
+}
+
 /**
  * Get user login response data
  * @param {number} [statusCode = 0] - User login status code

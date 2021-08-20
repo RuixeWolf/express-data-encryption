@@ -9,8 +9,14 @@ import { Document } from 'mongoose'
 import { UserLoginReq, UserLoginRes, UserInfoDoc, UserPasswordDoc } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
 import UserPasswordModel from '../models/UserPassword'
-import { login as loginView } from '../views'
 import { secretKey } from '@configs/secretKey'
+import { login as loginView, loginStatusCodes } from '../views'
+
+// Import status codes
+const {
+  LOGIN_SUCCESS,
+  USER_NOT_EXIST_OR_INVALID_PASSWORD
+} = loginStatusCodes
 
 /**
  * User login API controller
@@ -26,7 +32,7 @@ export function login (): RequestHandler {
     // 解密密码
     reqData.password = rsaDecrypt(reqData.password)
     if (!reqData.password) {
-      const resData: UserLoginRes = loginView(2)
+      const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -61,7 +67,7 @@ export function login (): RequestHandler {
 
     // 验证用户 ID
     if (!userId) {
-      const resData: UserLoginRes = loginView(2)
+      const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -79,7 +85,7 @@ export function login (): RequestHandler {
 
     // 用户不存在
     if (!userPasswordDoc) {
-      const resData: UserLoginRes = loginView(2)
+      const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -87,7 +93,7 @@ export function login (): RequestHandler {
     // 验证用户密码（secretKey + 用户密码）
     const encryptedUserPassword: string = MD5(secretKey + reqData.password).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
-      const resData: UserLoginRes = loginView(2)
+      const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -146,7 +152,7 @@ export function login (): RequestHandler {
 
     // 登录成功
     if (sessionInfoSaveRes) {
-      const resData: UserLoginRes = loginView(1, { authToken })
+      const resData: UserLoginRes = loginView(LOGIN_SUCCESS, { authToken })
       res.json(resData)
       return
     }

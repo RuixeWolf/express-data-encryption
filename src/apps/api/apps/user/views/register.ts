@@ -1,5 +1,15 @@
 import { UserInfoDoc, UserRegisterRes } from '../interfaces'
 
+// Exprot status codes
+export const registerStatusCodes: Record<string, number> = {
+  REGISTER_SUCCESS: 1,
+  INVALID_USER_NAME: 2,
+  USER_NAME_EXIST: 3,
+  INVALID_PASSWORD: 4,
+  INVALID_EMAIL: 5,
+  INVALID_PHONE: 6
+}
+
 /**
  * Get user register response data
  * @param {number} [statusCode = 0] - Registration status code

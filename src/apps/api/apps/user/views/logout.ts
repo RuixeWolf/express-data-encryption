@@ -1,5 +1,11 @@
 import { UserLogoutRes } from '../interfaces'
 
+// Exprot status codes
+export const logoutStatusCodes: Record<string, number> = {
+  LOGOUT_SUCCESS: 1,
+  USER_NOT_EXIST: 2
+}
+
 /**
  * Get user logout response data
  * @param {number} [statusCode = 0] - User logout status code

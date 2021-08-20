@@ -2,7 +2,13 @@ import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import SessionInfoModel from '@/models/SessionInfo'
 import { Response, NextFunction } from 'express'
 import { UserLogoutRes } from '../interfaces'
-import { logout as logoutView } from '../views'
+import { logout as logoutView, logoutStatusCodes } from '../views'
+
+// Import status codes
+const {
+  LOGOUT_SUCCESS,
+  USER_NOT_EXIST
+} = logoutStatusCodes
 
 /**
  * User logout API controller
@@ -14,7 +20,7 @@ export function logout (): SessionRequestHandler {
     const userId: string = req.session.userId
     const sessionId: string = req.session.sessionId
     if (!userId || !sessionId) {
-      const resData: UserLogoutRes = logoutView(2)
+      const resData: UserLogoutRes = logoutView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -37,7 +43,7 @@ export function logout (): SessionRequestHandler {
 
     // 退出登录成功
     if (sessionDelRes.ok) {
-      const resData: UserLogoutRes = logoutView(1, logoutData)
+      const resData: UserLogoutRes = logoutView(LOGOUT_SUCCESS, logoutData)
       res.json(resData)
       return
     }

@@ -3,7 +3,15 @@ import { Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { EditUserInfoRes, EditUserInfoReq, EditUserInfoFields, UserInfoDoc, EditUserInfoResData } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
-import { editInfo as editInfoView } from '../views'
+import { editInfo as editInfoView, editInfoStatusCodes } from '../views'
+
+// Import status codes
+const {
+  EDIT_INFO_SUCCESS,
+  USER_NOT_EXIST,
+  INVALID_EMAIL,
+  INVALID_PHONE
+} = editInfoStatusCodes
 
 /**
  * Edit user info API controller
@@ -15,7 +23,7 @@ export function editInfo (): SessionRequestHandler {
     const userId: string = req.session.userId
     // 用户 ID 缺失
     if (!userId) {
-      const resData: EditUserInfoRes = editInfoView(2)
+      const resData: EditUserInfoRes = editInfoView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -28,7 +36,7 @@ export function editInfo (): SessionRequestHandler {
     // 验证邮箱（非必填）
     const emailReg: RegExp = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/
     if (reqData.email && !emailReg.test(reqData.email)) {
-      const resData: EditUserInfoRes = editInfoView(3)
+      const resData: EditUserInfoRes = editInfoView(INVALID_EMAIL)
       res.json(resData)
       return
     }
@@ -36,7 +44,7 @@ export function editInfo (): SessionRequestHandler {
     // 验证手机号（非必填）
     const phoneNumReg: RegExp = /^1[3456789]\d{9}$/
     if (reqData.phone && !phoneNumReg.test(reqData.phone)) {
-      const resData: EditUserInfoRes = editInfoView(4)
+      const resData: EditUserInfoRes = editInfoView(INVALID_PHONE)
       res.json(resData)
       return
     }
@@ -79,7 +87,7 @@ export function editInfo (): SessionRequestHandler {
 
     // 用户不存在
     if (!userInfoUpdateRes) {
-      const resData: EditUserInfoRes = editInfoView(2)
+      const resData: EditUserInfoRes = editInfoView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -99,7 +107,7 @@ export function editInfo (): SessionRequestHandler {
 
     // 修改用户信息成功
     if (userInfoUpdateRes && editUserInfoResData.userId === userId) {
-      const resData: EditUserInfoRes = editInfoView(1, editUserInfoResData)
+      const resData: EditUserInfoRes = editInfoView(EDIT_INFO_SUCCESS, editUserInfoResData)
       res.json(resData)
       return
     }

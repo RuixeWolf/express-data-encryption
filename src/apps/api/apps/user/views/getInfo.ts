@@ -1,5 +1,11 @@
 import { GetUserInfoResData, GetUserInfoRes } from '../interfaces'
 
+// Exprot status codes
+export const getInfoStatusCodes: Record<string, number> = {
+  GET_INFO_SUCCESS: 1,
+  USER_NOT_EXIST: 2
+}
+
 /**
  * Get user information response data
  * @param {number} [statusCode = 0] - Get user information status code

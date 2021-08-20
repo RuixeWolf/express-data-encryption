@@ -1,5 +1,12 @@
 import { AccountCancellationRes } from '../interfaces'
 
+// Exprot status codes
+export const accountCancellationStatusCodes: Record<string, number> = {
+  ACCOUNT_CANCELLATION_SUCCESS: 1,
+  USER_NOT_EXIST: 2,
+  INVALID_PASSWORD: 3
+}
+
 /**
  * Get user account cancellation response
  * @param {number} [statusCode = 0] - Account cancellation satus code

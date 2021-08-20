@@ -6,7 +6,15 @@ import { Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { ModifyUserPaswdRes, ModifyUserPaswdReq, UserPasswordDoc } from '../interfaces'
 import UserPasswordModel from '../models/UserPassword'
-import { modifyPassword as modifyPasswordView } from '../views'
+import { modifyPassword as modifyPasswordView, modifyPasswordStatusCodes } from '../views'
+
+// Import status codes
+const {
+  PASSWORD_MODIFIED_SUCCESS,
+  USER_NOT_EXIST,
+  INVALID_OLD_PASSWORD,
+  INVALID_NEW_PASSWORD
+} = modifyPasswordStatusCodes
 
 /**
  * Modify user password API controller
@@ -18,7 +26,7 @@ export function modifyPassword (): SessionRequestHandler {
     const userId: string = req.session.userId
     const sessionId: string = req.session.sessionId
     if (!userId || !sessionId) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(2)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -32,14 +40,14 @@ export function modifyPassword (): SessionRequestHandler {
 
     // 验证旧密码解密结果
     if (!reqData.oldPassword) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(3)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_OLD_PASSWORD)
       res.json(resData)
       return
     }
 
     // 验证新密码解密结果
     if (!reqData.newPassword) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(4)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_NEW_PASSWORD)
       res.json(resData)
       return
     }
@@ -57,7 +65,7 @@ export function modifyPassword (): SessionRequestHandler {
 
     // 用户不存在
     if (!userPasswordDoc) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(2)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -65,14 +73,14 @@ export function modifyPassword (): SessionRequestHandler {
     // 验证用户旧密码
     const encryptedUserOldPassword: string = MD5(reqData.oldPassword).toString()
     if (!userPasswordDoc.password || encryptedUserOldPassword !== userPasswordDoc.password) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(3)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_OLD_PASSWORD)
       res.json(resData)
       return
     }
 
     // 验证新密码有效性
     if (!reqData.newPassword || reqData.newPassword.length < 6) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(4)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_NEW_PASSWORD)
       res.json(resData)
       return
     }
@@ -105,7 +113,7 @@ export function modifyPassword (): SessionRequestHandler {
 
     // 密码修改成功
     if (userPasswordUpdateRes && userPasswordUpdateRes.password === encryptedUserNewPassword) {
-      const resData: ModifyUserPaswdRes = modifyPasswordView(1)
+      const resData: ModifyUserPaswdRes = modifyPasswordView(PASSWORD_MODIFIED_SUCCESS)
       res.json(resData)
       return
     }

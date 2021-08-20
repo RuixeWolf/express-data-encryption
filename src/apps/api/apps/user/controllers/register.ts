@@ -6,8 +6,18 @@ import { Document } from 'mongoose'
 import { UserRegisterReq, UserRegisterRes, UserInfoDoc, UserPasswordDoc } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
 import UserPasswordModel from '../models/UserPassword'
-import { register as registerView } from '../views'
 import { secretKey } from '@configs/secretKey'
+import { register as registerView, registerStatusCodes } from '../views'
+
+// Import status codes
+const {
+  REGISTER_SUCCESS,
+  INVALID_USER_NAME,
+  USER_NAME_EXIST,
+  INVALID_PASSWORD,
+  INVALID_EMAIL,
+  INVALID_PHONE
+} = registerStatusCodes
 
 /**
  * User register API controller
@@ -23,7 +33,7 @@ export function register (): RequestHandler {
     // 解密密码
     reqData.password = rsaDecrypt(reqData.password)
     if (!reqData.password) {
-      const resData: UserRegisterRes = registerView(4)
+      const resData: UserRegisterRes = registerView(INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -33,7 +43,7 @@ export function register (): RequestHandler {
     // 验证用户名（必填）
     const userNameReg: RegExp = /^[a-zA-Z0-9_-]*$/
     if (!reqData.userName || !userNameReg.test(reqData.userName)) {
-      const resData: UserRegisterRes = registerView(2)
+      const resData: UserRegisterRes = registerView(INVALID_USER_NAME)
       res.json(resData)
       return
     }
@@ -41,7 +51,7 @@ export function register (): RequestHandler {
     // 用户名查重
     try {
       if (await UserInfoModel.findOne({ userName: reqData.userName })) {
-        const resData: UserRegisterRes = registerView(3)
+        const resData: UserRegisterRes = registerView(USER_NAME_EXIST)
         res.json(resData)
         return
       }
@@ -52,7 +62,7 @@ export function register (): RequestHandler {
 
     // 验证密码（必填）
     if (!reqData.password || reqData.password.length < 6) {
-      const resData: UserRegisterRes = registerView(4)
+      const resData: UserRegisterRes = registerView(INVALID_PASSWORD)
       res.json(resData)
       return
     }
@@ -60,7 +70,7 @@ export function register (): RequestHandler {
     // 验证邮箱（非必填）
     const emailReg: RegExp = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/
     if (reqData.email && !emailReg.test(reqData.email)) {
-      const resData: UserRegisterRes = registerView(5)
+      const resData: UserRegisterRes = registerView(INVALID_EMAIL)
       res.json(resData)
       return
     }
@@ -68,7 +78,7 @@ export function register (): RequestHandler {
     // 验证手机号（非必填）
     const phoneNumReg: RegExp = /^1[3456789]\d{9}$/
     if (reqData.phone && !phoneNumReg.test(reqData.phone)) {
-      const resData: UserRegisterRes = registerView(6)
+      const resData: UserRegisterRes = registerView(INVALID_PHONE)
       res.json(resData)
       return
     }
@@ -147,7 +157,7 @@ export function register (): RequestHandler {
 
     // 注册成功
     if (userInfoSaveRes && userPasswordSaveRes) {
-      const resData: UserRegisterRes = registerView(1, newUserInfoDoc)
+      const resData: UserRegisterRes = registerView(REGISTER_SUCCESS, newUserInfoDoc)
       res.json(resData)
       return
     }

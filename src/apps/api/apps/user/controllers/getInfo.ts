@@ -3,7 +3,13 @@ import { Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { GetUserInfoRes, UserInfoDoc, GetUserInfoResData } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
-import { getInfo as getInfoView } from '../views'
+import { getInfo as getInfoView, getInfoStatusCodes } from '../views'
+
+// Import status codes
+const {
+  GET_INFO_SUCCESS,
+  USER_NOT_EXIST
+} = getInfoStatusCodes
 
 /**
  * Get user information API controller
@@ -15,7 +21,7 @@ export function getInfo (): SessionRequestHandler {
     const userId: string = req.session.userId
     // 用户 ID 缺失
     if (!userId) {
-      const resData: GetUserInfoRes = getInfoView(2)
+      const resData: GetUserInfoRes = getInfoView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -31,7 +37,7 @@ export function getInfo (): SessionRequestHandler {
 
     // 用户不存在
     if (!userInfoDoc) {
-      const resData: GetUserInfoRes = getInfoView(2)
+      const resData: GetUserInfoRes = getInfoView(USER_NOT_EXIST)
       res.json(resData)
       return
     }
@@ -51,7 +57,7 @@ export function getInfo (): SessionRequestHandler {
 
     // 获取用户信息成功
     if (userInfoDoc && userInfoResData.userId === userId) {
-      const resData: GetUserInfoRes = getInfoView(1, userInfoResData)
+      const resData: GetUserInfoRes = getInfoView(GET_INFO_SUCCESS, userInfoResData)
       res.json(resData)
       return
     }

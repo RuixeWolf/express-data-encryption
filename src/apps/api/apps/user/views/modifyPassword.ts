@@ -1,5 +1,13 @@
 import { ModifyUserPaswdRes } from '../interfaces'
 
+// Exprot status codes
+export const modifyPasswordStatusCodes: Record<string, number> = {
+  PASSWORD_MODIFIED_SUCCESS: 1,
+  USER_NOT_EXIST: 2,
+  INVALID_OLD_PASSWORD: 3,
+  INVALID_NEW_PASSWORD: 4
+}
+
 /**
  * Get modify user password response data
  * @param {number} [statusCode = 0] - Modify user password status code
