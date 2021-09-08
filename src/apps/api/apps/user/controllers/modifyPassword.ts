@@ -7,6 +7,7 @@ import { Document } from 'mongoose'
 import { ModifyUserPaswdRes, ModifyUserPaswdReq, UserPasswordDoc } from '../interfaces'
 import UserPasswordModel from '../models/UserPassword'
 import { modifyPassword as modifyPasswordView, modifyPasswordStatusCodes } from '../views'
+import { secretKey } from '@configs/secretKey'
 
 // Import status codes
 const {
@@ -71,7 +72,7 @@ export function modifyPassword (): SessionRequestHandler {
     }
 
     // 验证用户旧密码
-    const encryptedUserOldPassword: string = MD5(reqData.oldPassword).toString()
+    const encryptedUserOldPassword: string = MD5(secretKey + reqData.oldPassword).toString()
     if (!userPasswordDoc.password || encryptedUserOldPassword !== userPasswordDoc.password) {
       const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_OLD_PASSWORD)
       res.json(resData)
@@ -88,7 +89,7 @@ export function modifyPassword (): SessionRequestHandler {
     /** 处理修改密码事件 */
 
     // MD5 单向加密新密码
-    const encryptedUserNewPassword: string = MD5(reqData.newPassword).toString()
+    const encryptedUserNewPassword: string = MD5(secretKey + reqData.newPassword).toString()
 
     // 更新用户密码
     let userPasswordUpdateRes: (UserPasswordDoc & Document<UserPasswordDoc>) | null
