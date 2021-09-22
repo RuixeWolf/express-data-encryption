@@ -5,7 +5,7 @@
 import AES from 'crypto-js/aes'
 import encUtf8 from 'crypto-js/enc-utf8'
 import { printLog } from '@utils/printLog'
-import { secretKey } from '@configs/secretKey'
+import { aesSecretKey } from '@configs/secretKey'
 
 /**
  * Generate token from session ID
@@ -14,7 +14,7 @@ import { secretKey } from '@configs/secretKey'
  */
 export function generateToken (sessionId: string): string {
   try {
-    const token: string = AES.encrypt(sessionId, secretKey).toString()
+    const token: string = AES.encrypt(sessionId, aesSecretKey).toString()
     return token
   } catch (error) {
     const err: Error = error as Error
@@ -30,7 +30,7 @@ export function generateToken (sessionId: string): string {
  */
 export function parseToken (token: string): string {
   try {
-    const sessionId: string = AES.decrypt(token, secretKey).toString(encUtf8)
+    const sessionId: string = AES.decrypt(token, aesSecretKey).toString(encUtf8)
     return sessionId
   } catch (error) {
     const err: Error = error as Error
