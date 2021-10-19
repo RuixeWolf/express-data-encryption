@@ -13,6 +13,5 @@ module.exports = {
   type: 'commonjs',
   scripts: {
     start: 'node ./src/main.js'
-  },
-  _moduleAliases: packageConfig._moduleAliases
+  }
 }

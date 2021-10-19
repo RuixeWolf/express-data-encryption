@@ -2,9 +2,6 @@
  * Main service app entrance
  */
 
-// Register module alias
-import 'module-alias/register'
-
 import express, { Express } from 'express'
 import * as serviceConfig from './configs/service'
 import middlewares from './publicMiddlewares'
