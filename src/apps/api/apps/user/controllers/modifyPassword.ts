@@ -1,7 +1,7 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import SessionInfoModel from '@/models/SessionInfo'
 import { rsaDecrypt } from '@/utils/rsaEncrypt'
-import { MD5 } from 'crypto-js'
+import { HmacMD5 } from 'crypto-js'
 import { Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { ModifyUserPaswdRes, ModifyUserPaswdReq, UserPasswordDoc } from '../interfaces'
@@ -72,7 +72,7 @@ export function modifyPassword (): SessionRequestHandler {
     }
 
     // 验证用户旧密码
-    const encryptedUserOldPassword: string = MD5(secretKey + reqData.oldPassword).toString()
+    const encryptedUserOldPassword: string = HmacMD5(reqData.oldPassword, secretKey).toString()
     if (!userPasswordDoc.password || encryptedUserOldPassword !== userPasswordDoc.password) {
       const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_OLD_PASSWORD)
       res.json(resData)
@@ -89,7 +89,7 @@ export function modifyPassword (): SessionRequestHandler {
     /** 处理修改密码事件 */
 
     // MD5 单向加密新密码
-    const encryptedUserNewPassword: string = MD5(secretKey + reqData.newPassword).toString()
+    const encryptedUserNewPassword: string = HmacMD5(reqData.newPassword, secretKey).toString()
 
     // 更新用户密码
     let userPasswordUpdateRes: (UserPasswordDoc & Document<UserPasswordDoc>) | null

@@ -3,7 +3,7 @@ import SessionInfoModel from '@/models/SessionInfo'
 import { generateId } from '@/utils/idGenerator'
 import { rsaDecrypt } from '@/utils/rsaEncrypt'
 import { generateToken } from '@/utils/sessionToken'
-import { MD5 } from 'crypto-js'
+import { HmacMD5 } from 'crypto-js'
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { UserLoginReq, UserLoginRes, UserInfoDoc, UserPasswordDoc } from '../interfaces'
@@ -91,7 +91,7 @@ export function login (): RequestHandler {
     }
 
     // 验证用户密码（secretKey + 用户密码）
-    const encryptedUserPassword: string = MD5(secretKey + reqData.password).toString()
+    const encryptedUserPassword: string = HmacMD5(reqData.password, secretKey).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
       const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
       res.json(resData)

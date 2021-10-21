@@ -1,7 +1,7 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import SessionInfoModel from '@/models/SessionInfo'
 import { rsaDecrypt } from '@/utils/rsaEncrypt'
-import { MD5 } from 'crypto-js'
+import { HmacMD5 } from 'crypto-js'
 import { Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { AccountCancellationRes, AccountCancellationReq, UserPasswordDoc } from '../interfaces'
@@ -67,7 +67,7 @@ export function accountCancellation (): SessionRequestHandler {
     }
 
     // 验证密码
-    const encryptedUserPassword: string = MD5(secretKey + reqData.password).toString()
+    const encryptedUserPassword: string = HmacMD5(reqData.password, secretKey).toString()
     if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
       const resData: AccountCancellationRes = accountCancellationView(INVALID_PASSWORD)
       res.json(resData)

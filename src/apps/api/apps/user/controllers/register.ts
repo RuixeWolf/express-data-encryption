@@ -1,6 +1,6 @@
 import { generateId, generateAccount } from '@/utils/idGenerator'
 import { rsaDecrypt } from '@/utils/rsaEncrypt'
-import { MD5 } from 'crypto-js'
+import { HmacMD5 } from 'crypto-js'
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
 import { UserRegisterReq, UserRegisterRes, UserInfoDoc, UserPasswordDoc } from '../interfaces'
@@ -116,7 +116,7 @@ export function register (): RequestHandler {
     }
 
     // MD5 单向加密密码（secretKey + 用户密码）
-    const password: string = MD5(secretKey + reqData.password).toString()
+    const password: string = HmacMD5(reqData.password, secretKey).toString()
 
     // 生成用户信息文档
     const currentTime: Date = new Date()
