@@ -42,9 +42,8 @@ mkdir static
 
 ### 配置数据库
 
-```shell
-code ./src/configs/mongodb.ts
-```
+- 设置 MongoDB URL 环境变量，环境变量名称默认为：`EXPRESS_MONGODB_URL`
+- MongoDB URL 环境变量内容为：`mongodb://[user]:[password]@[host]:[port]/[dbName]?authSource=[dbName]`
 
 ### 安装依赖
 

@@ -2,13 +2,10 @@
  * MongoDB config
  */
 
-const host: string = 'localhost'
-const port: number = 27017
-const user: string = 'expressApp'
-const pwd: string = '123456'
-const dbName: string = 'express-data-encryption'
-const authSource: string = 'express-data-encryption'
+// Environment variable name of the MongoDB URL
+const envName: string = 'EXPRESS_MONGODB_URL'
 
-// Generate and export MongoDB connection string
-export const mongodbUrl: string = `mongodb://${user}:${pwd}@${host}:${port}/${dbName}?authSource=${authSource}`
+// Get MongoDB connection string
+// MongoDB URL format: mongodb://[user]:[password]@[host]:[port]/[dbName]?authSource=[dbName]
+export const mongodbUrl: string = process.env[envName] as string
 export default mongodbUrl
