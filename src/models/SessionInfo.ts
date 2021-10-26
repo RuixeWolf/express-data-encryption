@@ -42,5 +42,9 @@ const SessionInfoSchema: Schema = new Schema({
   }
 })
 
-const SessionInfoModel: Model<SessionInfoDoc, unknown, unknown> = mongoose.model('SessionInfo', SessionInfoSchema)
+const SessionInfoModel: Model<SessionInfoDoc, unknown, unknown> = mongoose.model(
+  'SessionInfo',
+  SessionInfoSchema,
+  'session_info'
+)
 export default SessionInfoModel

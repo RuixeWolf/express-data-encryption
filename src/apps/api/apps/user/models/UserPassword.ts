@@ -31,6 +31,10 @@ const UserPasswordSchema: Schema = new Schema({
 })
 
 // Create user password model
-const UserPasswordModel: Model<UserPasswordDoc, unknown, unknown> = mongoose.model('UserPassword', UserPasswordSchema)
+const UserPasswordModel: Model<UserPasswordDoc, unknown, unknown> = mongoose.model(
+  'UserPassword',
+  UserPasswordSchema,
+  'user_password'
+)
 
 export default UserPasswordModel
