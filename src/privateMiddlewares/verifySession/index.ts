@@ -8,7 +8,6 @@ import { parseToken } from '@utils/sessionToken'
 import SessionInfoModel from '@models/SessionInfo'
 import * as view from './views'
 import { JsonRes } from '@interfaces/resBody'
-import { Document } from 'mongoose'
 
 /**
  * Verify session information
@@ -39,12 +38,12 @@ export function verifySession (): SessionRequestHandler {
     }
 
     // 查询会话信息
-    let sessionInfo: (SessionInfoDoc & Document<SessionInfoDoc, unknown>) | null
+    let sessionInfo: SessionInfoDoc | null
     try {
       sessionInfo = await SessionInfoModel.findOne(
         { sessionId },
         { _id: false }
-      )
+      ) as SessionInfoDoc | null
     } catch (error) {
       next(error)
       return

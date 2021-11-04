@@ -2,7 +2,7 @@
  * UserInfo model
  */
 
-import mongoose, { Schema, Model } from 'mongoose'
+import mongoose, { Schema, Model, Document } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
 import { UserInfoDoc } from '../interfaces'
@@ -54,7 +54,7 @@ const UserInfoSchema: Schema = new Schema({
 })
 
 // Create user info model
-const UserInfoModel: Model<UserInfoDoc, unknown, unknown> = mongoose.model(
+const UserInfoModel: Model<Document<UserInfoDoc>> = mongoose.model(
   'UserInfo',
   UserInfoSchema,
   'user_info'

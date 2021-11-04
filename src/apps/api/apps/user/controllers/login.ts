@@ -51,10 +51,10 @@ export function login (): RequestHandler {
     // 查询用户 ID
     try {
       for (const queryField of queryFields) {
-        const user: (UserInfoDoc & Document<UserInfoDoc, unknown>) | null = await UserInfoModel.findOne(
+        const user: UserInfoDoc | null = await UserInfoModel.findOne(
           { [queryField]: reqData.user },
           { userId: true, _id: false }
-        )
+        ) as UserInfoDoc | null
         if (user) {
           userId = user.userId
           break
@@ -73,11 +73,11 @@ export function login (): RequestHandler {
     }
 
     // 查询密码
-    let userPasswordDoc: (UserPasswordDoc & Document<UserPasswordDoc, unknown>) | null
+    let userPasswordDoc: UserPasswordDoc | null
     try {
       userPasswordDoc = await UserPasswordModel.findOne(
         { userId }
-      )
+      ) as UserPasswordDoc | null
     } catch (error) {
       next(error)
       return

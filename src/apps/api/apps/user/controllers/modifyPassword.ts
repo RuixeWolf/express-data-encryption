@@ -3,7 +3,6 @@ import SessionInfoModel from '@/models/SessionInfo'
 import { rsaDecrypt } from '@/utils/rsaEncrypt'
 import { HmacMD5 } from 'crypto-js'
 import { Response, NextFunction } from 'express'
-import { Document } from 'mongoose'
 import { ModifyUserPaswdRes, ModifyUserPaswdReq, UserPasswordDoc } from '../interfaces'
 import UserPasswordModel from '../models/UserPassword'
 import { modifyPassword as modifyPasswordView, modifyPasswordStatusCodes } from '../views'
@@ -54,11 +53,11 @@ export function modifyPassword (): SessionRequestHandler {
     }
 
     // 查询旧密码
-    let userPasswordDoc: (UserPasswordDoc & Document<UserPasswordDoc>) | null
+    let userPasswordDoc: UserPasswordDoc | null
     try {
       userPasswordDoc = await UserPasswordModel.findOne(
         { userId }
-      )
+      ) as UserPasswordDoc | null
     } catch (error) {
       next(error)
       return
@@ -92,13 +91,13 @@ export function modifyPassword (): SessionRequestHandler {
     const encryptedUserNewPassword: string = HmacMD5(reqData.newPassword, secretKey).toString()
 
     // 更新用户密码
-    let userPasswordUpdateRes: (UserPasswordDoc & Document<UserPasswordDoc>) | null
+    let userPasswordUpdateRes: UserPasswordDoc | null
     try {
       userPasswordUpdateRes = await UserPasswordModel.findOneAndUpdate(
         { userId },
         { password: encryptedUserNewPassword },
         { new: true, useFindAndModify: false }
-      )
+      ) as UserPasswordDoc | null
     } catch (error) {
       next(error)
       return

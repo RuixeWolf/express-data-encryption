@@ -2,7 +2,7 @@
  * UserPassword model
  */
 
-import mongoose, { Schema, Model } from 'mongoose'
+import mongoose, { Schema, Model, Document } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
 import { UserPasswordDoc } from '../interfaces'
@@ -31,7 +31,7 @@ const UserPasswordSchema: Schema = new Schema({
 })
 
 // Create user password model
-const UserPasswordModel: Model<UserPasswordDoc, unknown, unknown> = mongoose.model(
+const UserPasswordModel: Model<Document<UserPasswordDoc>> = mongoose.model(
   'UserPassword',
   UserPasswordSchema,
   'user_password'

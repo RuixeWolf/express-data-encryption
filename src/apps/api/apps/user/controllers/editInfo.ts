@@ -1,6 +1,5 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import { Response, NextFunction } from 'express'
-import { Document } from 'mongoose'
 import { EditUserInfoRes, EditUserInfoReq, EditUserInfoFields, UserInfoDoc, EditUserInfoResData } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
 import { editInfo as editInfoView, editInfoStatusCodes } from '../views'
@@ -73,13 +72,13 @@ export function editInfo (): SessionRequestHandler {
     }
 
     // 更新用户信息
-    let userInfoUpdateRes: (UserInfoDoc & Document<UserInfoDoc>) | null
+    let userInfoUpdateRes: UserInfoDoc | null
     try {
       userInfoUpdateRes = await UserInfoModel.findOneAndUpdate(
         { userId },
         userInfoUpdateData,
         { new: true, useFindAndModify: false }
-      )
+      ) as UserInfoDoc | null
     } catch (error) {
       next(error)
       return

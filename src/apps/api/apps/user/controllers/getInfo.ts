@@ -1,6 +1,5 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import { Response, NextFunction } from 'express'
-import { Document } from 'mongoose'
 import { GetUserInfoRes, UserInfoDoc, GetUserInfoResData } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
 import { getInfo as getInfoView, getInfoStatusCodes } from '../views'
@@ -27,9 +26,9 @@ export function getInfo (): SessionRequestHandler {
     }
 
     // 查询用户信息
-    let userInfoDoc: (UserInfoDoc & Document<UserInfoDoc>) | null
+    let userInfoDoc: UserInfoDoc | null
     try {
-      userInfoDoc = await UserInfoModel.findOne({ userId }, { _id: false })
+      userInfoDoc = await UserInfoModel.findOne({ userId }, { _id: false }) as UserInfoDoc | null
     } catch (error) {
       next(error)
       return

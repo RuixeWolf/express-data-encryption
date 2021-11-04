@@ -2,7 +2,7 @@
  * SessionInfo model
  */
 
-import mongoose, { Schema, Model } from 'mongoose'
+import mongoose, { Schema, Model, Document } from 'mongoose'
 import mongodbUrl from '@configs/mongodb'
 import { printLog } from '@utils/printLog'
 import { SessionInfoDoc } from '@interfaces/session'
@@ -42,7 +42,7 @@ const SessionInfoSchema: Schema = new Schema({
   }
 })
 
-const SessionInfoModel: Model<SessionInfoDoc, unknown, unknown> = mongoose.model(
+const SessionInfoModel: Model<Document<SessionInfoDoc>> = mongoose.model(
   'SessionInfo',
   SessionInfoSchema,
   'session_info'
