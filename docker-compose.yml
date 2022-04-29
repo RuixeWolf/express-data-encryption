@@ -1,0 +1,16 @@
+services:
+  express-app:
+    image: express-data-encryption
+    ports:
+      - 8002:8000
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:focal
+    ports:
+      - 27018:27017
+    volumes:
+      - ./docker/volumes/mongodb/data:/data/db
+      - ./docker/volumes/mongodb/config:/data/configdb

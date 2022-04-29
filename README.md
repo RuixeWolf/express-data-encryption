@@ -71,6 +71,30 @@ npm run build
 
 生产环境可以选择部署打包后的项目，以提高启动速度与保护源码
 
+## 使用 Docker 运行项目
+
+### 构建 Docker 镜像
+
+```shell
+npm run build:docker-image
+```
+
+注：需要已有前端应用 `frontendApp` 目录与 RSA 密钥 `keys` 目录
+
+### 启动 Docker Compose
+
+```shell
+npm run start:docker-compose
+```
+
+项目运行于 `http://localhost:8002/`
+
+### 关闭 Docker Compose
+
+```shell
+npm run stop:docker-compose
+```
+
 ## 目录结构
 
 ```
