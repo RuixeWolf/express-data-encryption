@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon --config ./nodemon.json -r tsconfig-paths/register ./src/main.ts",
     "start": "cross-env NODE_ENV=development ts-node -r tsconfig-paths/register ./src/main.ts",
     "start:docker-compose": "docker-compose up -d",
-    "stop:docker-compose": "docker-compose stop",
+    "stop:docker-compose": "docker-compose down",
     "build": "node ./builder/main.js",
     "build:docker-image": "npm run build && docker build -t express-data-encryption .",
     "lint-check": "eslint ./src/**/*",
