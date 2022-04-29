@@ -23,8 +23,8 @@
 
 ```shell
 mkdir keys && cd keys
-openssl genrsa -out rsa_1024_priv.pem 1024
-openssl rsa -pubout -in rsa_1024_priv.pem -out rsa_1024_pub.pem
+openssl genrsa -out rsa_2048_priv.pem 2048
+openssl rsa -pubout -in rsa_2048_priv.pem -out rsa_2048_pub.pem
 ```
 
 ### 添加前端应用
