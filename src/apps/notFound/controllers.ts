@@ -5,6 +5,14 @@
 import { RequestHandler, Request, Response } from 'express'
 import { printLog } from '@utils/printLog'
 
+// Do not handle the list of paths to the log
+const LOG_BLOCK_LIST = [
+  '/404',
+  '/notFound',
+  '/not_found',
+  '/not-found'
+]
+
 /**
  * Not found controller
  * @description Handle HTTP 404
@@ -15,7 +23,9 @@ export function notFound (): RequestHandler {
     // Print HTTP 404 log
     const method: string = req.method
     const originalUrl: string = req.originalUrl
-    printLog(`[${req.ip}]`, `Cannot ${method} ${originalUrl}`, 2)
+    if (!LOG_BLOCK_LIST.includes(originalUrl)) {
+      printLog(`[${req.ip}]`, `Cannot ${method} ${originalUrl}`, 2)
+    }
 
     // Response HTTP 404
     res.status(404)
