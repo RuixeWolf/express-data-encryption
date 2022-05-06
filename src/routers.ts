@@ -11,7 +11,8 @@ import notFoundAppRouter from '@/apps/notFound/routers'
 const router: Router = Router()
 
 // Route request to app's router
-router.use('/api', apiAppRouter)
+// Example: /api/v1/user/info
+router.use('/api/:apiVersion(v\\d+)', apiAppRouter)
 
 // Register 404 not found
 router.use('*', notFoundAppRouter)

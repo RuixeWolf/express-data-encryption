@@ -6,22 +6,22 @@ import { Router, RequestHandler } from 'express'
 import * as controllers from './controllers'
 import { verifySession } from '@/privateMiddlewares/verifySession'
 
-const router: Router = Router()
+const router: Router = Router({ mergeParams: true })
 
 /**
- * $route POST /api/user/register
+ * $route POST /api/:apiVersion/user/register
  * @access public
  */
 router.post('/register', controllers.register())
 
 /**
- * $route POST /api/user/login
+ * $route POST /api/:apiVersion/user/login
  * @access public
  */
 router.post('/login', controllers.login())
 
 /**
- * $route GET /api/user/logout
+ * $route GET /api/:apiVersion/user/logout
  * @access private
  */
 router.get(
@@ -32,7 +32,7 @@ router.get(
 )
 
 /**
- * $route GET /api/user/info
+ * $route GET /api/:apiVersion/user/info
  * @access private
  */
 router.get(
@@ -42,7 +42,7 @@ router.get(
 )
 
 /**
- * $route POST /api/user/info
+ * $route POST /api/:apiVersion/user/info
  * @access private
  */
 router.post(
@@ -52,7 +52,7 @@ router.post(
 )
 
 /**
- * $route POST /api/user/modifypassword
+ * $route POST /api/:apiVersion/user/modifypassword
  * @access private
  */
 router.post(
@@ -62,7 +62,7 @@ router.post(
 )
 
 /**
- * $route POST /api/user/cancellation
+ * $route POST /api/:apiVersion/user/cancellation
  * @description User account cancellation
  * @access private
  */

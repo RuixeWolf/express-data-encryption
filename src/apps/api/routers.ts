@@ -8,7 +8,7 @@ import { Router } from 'express'
 import userAppRouter from './apps/user/routers'
 import rsaKeyAppRouter from './apps/key/routers'
 
-const router: Router = Router()
+const router: Router = Router({ mergeParams: true })
 
 // Route request to app's router
 router.use('/user', userAppRouter)

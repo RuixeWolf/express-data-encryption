@@ -11,57 +11,81 @@ const {
 } = getInfoStatusCodes
 
 /**
- * Get user information API controller
+ * Get user information API handler version 1
+ * @version v1
+ * @param req - Express session request
+ * @param res - Express response
+ * @param next - Express next function
+ */
+async function getInfoV1 (req: SessionRequest, res: Response, next: NextFunction) {
+  // 从会话信息获取用户 ID
+  const userId: string = req.session.userId
+  // 用户 ID 缺失
+  if (!userId) {
+    const resData: GetUserInfoRes = getInfoView(USER_NOT_EXIST)
+    res.json(resData)
+    return
+  }
+
+  // 查询用户信息
+  let userInfoDoc: UserInfoDoc | null
+  try {
+    userInfoDoc = await UserInfoModel.findOne({ userId }, { _id: false }) as UserInfoDoc | null
+  } catch (error) {
+    next(error)
+    return
+  }
+
+  // 用户不存在
+  if (!userInfoDoc) {
+    const resData: GetUserInfoRes = getInfoView(USER_NOT_EXIST)
+    res.json(resData)
+    return
+  }
+
+  // 生成用户信息响应数据
+  const userInfoResData: GetUserInfoResData = {
+    userId: userInfoDoc.userId,
+    userAccount: userInfoDoc.userAccount,
+    userName: userInfoDoc.userName,
+    nickName: userInfoDoc.nickName,
+    avatar: userInfoDoc.avatar,
+    email: userInfoDoc.email,
+    phone: userInfoDoc.phone,
+    modifiedTime: userInfoDoc.modifiedTime,
+    registerTime: userInfoDoc.registerTime
+  }
+
+  // 获取用户信息成功
+  if (userInfoDoc && userInfoResData.userId === userId) {
+    const resData: GetUserInfoRes = getInfoView(GET_INFO_SUCCESS, userInfoResData)
+    res.json(resData)
+    return
+  }
+
+  const defaultResData: GetUserInfoRes = getInfoView()
+  res.json(defaultResData)
+}
+
+/**
+ * Get user information API main controller
  * @returns {SessionRequestHandler} Session request handler of Express app
  */
 export function getInfo (): SessionRequestHandler {
-  return async (req: SessionRequest, res: Response, next: NextFunction) => {
-    // 从会话信息获取用户 ID
-    const userId: string = req.session.userId
-    // 用户 ID 缺失
-    if (!userId) {
-      const resData: GetUserInfoRes = getInfoView(USER_NOT_EXIST)
-      res.json(resData)
-      return
-    }
+  return (req: SessionRequest, res: Response, next: NextFunction) => {
+    // API version controller
+    switch (req.params.apiVersion) {
+      // API version 1
+      case 'v1': {
+        getInfoV1(req, res, next)
+        break
+      }
 
-    // 查询用户信息
-    let userInfoDoc: UserInfoDoc | null
-    try {
-      userInfoDoc = await UserInfoModel.findOne({ userId }, { _id: false }) as UserInfoDoc | null
-    } catch (error) {
-      next(error)
-      return
+      // API version not found
+      default: {
+        res.redirect('/404')
+        break
+      }
     }
-
-    // 用户不存在
-    if (!userInfoDoc) {
-      const resData: GetUserInfoRes = getInfoView(USER_NOT_EXIST)
-      res.json(resData)
-      return
-    }
-
-    // 生成用户信息响应数据
-    const userInfoResData: GetUserInfoResData = {
-      userId: userInfoDoc.userId,
-      userAccount: userInfoDoc.userAccount,
-      userName: userInfoDoc.userName,
-      nickName: userInfoDoc.nickName,
-      avatar: userInfoDoc.avatar,
-      email: userInfoDoc.email,
-      phone: userInfoDoc.phone,
-      modifiedTime: userInfoDoc.modifiedTime,
-      registerTime: userInfoDoc.registerTime
-    }
-
-    // 获取用户信息成功
-    if (userInfoDoc && userInfoResData.userId === userId) {
-      const resData: GetUserInfoRes = getInfoView(GET_INFO_SUCCESS, userInfoResData)
-      res.json(resData)
-      return
-    }
-
-    const defaultResData: GetUserInfoRes = getInfoView()
-    res.json(defaultResData)
   }
 }

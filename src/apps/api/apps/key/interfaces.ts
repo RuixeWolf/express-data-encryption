@@ -7,7 +7,7 @@ import { JsonRes } from '@interfaces/resBody'
 /**
  * Get key response
  */
-export interface GetPubKeyRes extends JsonRes {
+export interface GetPubKeyResV1 extends JsonRes {
   data: {
     pubKey: string
   }
