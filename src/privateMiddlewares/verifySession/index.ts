@@ -15,7 +15,7 @@ import { JsonRes } from '@interfaces/resBody'
  */
 export function verifySession (): SessionRequestHandler {
   return async (req: SessionRequest, res: Response, next: NextFunction) => {
-    /** 验证会话有效性 */
+    /* 验证会话有效性 */
 
     // 从请求头获取 authorization token
     const authToken: string | undefined = req.header('Authorization')
@@ -75,7 +75,7 @@ export function verifySession (): SessionRequestHandler {
       return
     }
 
-    /** 会话验证通过 */
+    /* 会话验证通过 */
 
     // 续期会话信息
     const date: Date = new Date()
@@ -96,6 +96,7 @@ export function verifySession (): SessionRequestHandler {
       sessionId: sessionInfo.sessionId,
       userId: sessionInfo.userId
     }
+
     // 转发请求至下一个处理器
     next()
   }
