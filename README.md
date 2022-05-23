@@ -100,6 +100,11 @@ npm run stop:docker-compose
 ```
 ├─builder - 项目构建器
 ├─dist - 打包输出目录
+├─docker - Docker 数据目录
+│  └─volumes - Docker 数据卷
+│     └─mongodb - MongoDB 数据卷
+│        ├─config - MongoDB 配置
+│        └─data - MongoDB 数据
 ├─frontendApp - 前端单页面应用
 ├─keys - RSA 密钥
 ├─src - 项目源码
