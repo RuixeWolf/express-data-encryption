@@ -1,5 +1,6 @@
 import { generateId, generateAccount } from '@/utils/idGenerator'
-import { rsaDecrypt } from '@/utils/rsaEncrypt'
+import { verifyAesSignature, aesDecryptWithTimestamp } from '@/utils/aes'
+import { rsaDecryptWithTimestamp } from '@/utils/rsa'
 import { HmacMD5 } from 'crypto-js'
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
@@ -16,7 +17,8 @@ const {
   USER_NAME_EXIST,
   INVALID_PASSWORD,
   INVALID_EMAIL,
-  INVALID_PHONE
+  INVALID_PHONE,
+  DATA_SIGNATURE_VERIFICATION_FAILED
 } = registerStatusCodes
 
 /**
@@ -32,10 +34,40 @@ async function registerV1 (req: Request, res: Response, next: NextFunction) {
 
   /* 解密数据 */
 
-  // 解密密码
-  reqData.password = rsaDecrypt(reqData.password)
-  if (!reqData.password) {
+  // 解密客户端 AES 密钥
+  const clientAesKey = rsaDecryptWithTimestamp(reqData.clientAesKey)
+  if (!clientAesKey) {
+    const resData: UserRegisterRes = registerView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 解密密码，AES 解密与验证，密码格式为 [用户密码]@#@#@[13位时间戳]，验证时间戳与服务器不超过 1 分钟
+  const userPassword = aesDecryptWithTimestamp(reqData.password, clientAesKey)
+  if (!userPassword) {
     const resData: UserRegisterRes = registerView(INVALID_PASSWORD)
+    res.json(resData)
+    return
+  }
+
+  /* 验证数字签名 */
+
+  // 从请求头 Signature 字段获取数据签名
+  const dataSignature = req.header('Signature')
+  if (!dataSignature) {
+    const resData: UserRegisterRes = registerView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 验证数字签名，判断数据是否被篡改
+  const verifySignatureResult = verifyAesSignature({
+    data: reqData as unknown as Record<string, unknown>,
+    signature: dataSignature,
+    aesSecretKey: clientAesKey
+  })
+  if (!verifySignatureResult) {
+    const resData: UserRegisterRes = registerView(DATA_SIGNATURE_VERIFICATION_FAILED)
     res.json(resData)
     return
   }
@@ -63,7 +95,7 @@ async function registerV1 (req: Request, res: Response, next: NextFunction) {
   }
 
   // 验证密码（必填）
-  if (!reqData.password || reqData.password.length < 6) {
+  if (!userPassword || userPassword.length < 6) {
     const resData: UserRegisterRes = registerView(INVALID_PASSWORD)
     res.json(resData)
     return
@@ -93,9 +125,7 @@ async function registerV1 (req: Request, res: Response, next: NextFunction) {
     while (true) {
       if (await UserInfoModel.findOne({ userId })) {
         userId = generateId()
-      } else {
-        break
-      }
+      } else { break }
     }
   } catch (error) {
     next(error)
@@ -108,9 +138,7 @@ async function registerV1 (req: Request, res: Response, next: NextFunction) {
     while (true) {
       if (await UserInfoModel.findOne({ userAccount })) {
         userAccount = generateAccount(10)
-      } else {
-        break
-      }
+      } else { break }
     }
   } catch (error) {
     next(error)
@@ -118,7 +146,7 @@ async function registerV1 (req: Request, res: Response, next: NextFunction) {
   }
 
   // MD5 单向加密密码（secretKey + 用户密码）
-  const password: string = HmacMD5(reqData.password, secretKey).toString()
+  const password: string = HmacMD5(userPassword, secretKey).toString()
 
   // 生成用户信息文档
   const currentTime: Date = new Date()

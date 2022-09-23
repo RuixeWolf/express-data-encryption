@@ -5,7 +5,8 @@ export const editInfoStatusCodes: Record<string, number> = {
   EDIT_INFO_SUCCESS: 1,
   USER_NOT_EXIST: 2,
   INVALID_EMAIL: 3,
-  INVALID_PHONE: 4
+  INVALID_PHONE: 4,
+  DATA_SIGNATURE_VERIFICATION_FAILED: 5
 }
 
 /**
@@ -49,6 +50,11 @@ export function editInfo (
     case 4:
       // 手机号无效
       resData.message = '手机号格式有误'
+      return resData
+
+    case 5:
+      // 数据签名验证失败
+      resData.message = '数据签名验证失败'
       return resData
 
     default:

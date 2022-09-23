@@ -1,8 +1,9 @@
 import { SessionInfoDoc } from '@/interfaces/session'
 import SessionInfoModel from '@/models/SessionInfo'
 import { generateId } from '@/utils/idGenerator'
-import { rsaDecrypt } from '@/utils/rsaEncrypt'
+import { rsaDecryptWithTimestamp } from '@/utils/rsa'
 import { generateToken } from '@/utils/sessionToken'
+import { verifyAesSignature, aesDecryptWithTimestamp } from '@/utils/aes'
 import { HmacMD5 } from 'crypto-js'
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { Document } from 'mongoose'
@@ -15,7 +16,8 @@ import { login as loginView, loginStatusCodes } from '../views'
 // Import status codes
 const {
   LOGIN_SUCCESS,
-  USER_NOT_EXIST_OR_INVALID_PASSWORD
+  USER_NOT_EXIST_OR_INVALID_PASSWORD,
+  DATA_SIGNATURE_VERIFICATION_FAILED
 } = loginStatusCodes
 
 /**
@@ -31,10 +33,40 @@ async function loginV1 (req: Request, res: Response, next: NextFunction) {
 
   /* 解密数据 */
 
-  // 解密密码
-  reqData.password = rsaDecrypt(reqData.password)
-  if (!reqData.password) {
+  // 解密客户端 AES 密钥
+  const clientAesKey = rsaDecryptWithTimestamp(reqData.clientAesKey)
+  if (!clientAesKey) {
+    const resData: UserLoginRes = loginView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 解密密码，AES 解密与验证，密码格式为 [用户密码]@#@#@[13位时间戳]，验证时间戳与服务器不超过 1 分钟
+  const userPassword = aesDecryptWithTimestamp(reqData.password, clientAesKey)
+  if (!userPassword) {
     const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
+    res.json(resData)
+    return
+  }
+
+  /* 验证数字签名 */
+
+  // 从请求头 Signature 字段获取数据签名
+  const dataSignature = req.header('Signature')
+  if (!dataSignature) {
+    const resData: UserLoginRes = loginView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 验证数字签名，判断数据是否被篡改
+  const verifySignatureResult = verifyAesSignature({
+    data: reqData as unknown as Record<string, unknown>,
+    signature: dataSignature,
+    aesSecretKey: clientAesKey
+  })
+  if (!verifySignatureResult) {
+    const resData: UserLoginRes = loginView(DATA_SIGNATURE_VERIFICATION_FAILED)
     res.json(resData)
     return
   }
@@ -93,7 +125,7 @@ async function loginV1 (req: Request, res: Response, next: NextFunction) {
   }
 
   // 验证用户密码（secretKey + 用户密码）
-  const encryptedUserPassword: string = HmacMD5(reqData.password, secretKey).toString()
+  const encryptedUserPassword: string = HmacMD5(userPassword, secretKey).toString()
   if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
     const resData: UserLoginRes = loginView(USER_NOT_EXIST_OR_INVALID_PASSWORD)
     res.json(resData)
@@ -137,6 +169,7 @@ async function loginV1 (req: Request, res: Response, next: NextFunction) {
     sessionId,
     authToken,
     userId,
+    clientAesKey,
     createdTime,
     expTime: afterOneWeek
   }

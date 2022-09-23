@@ -5,7 +5,7 @@
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import * as view from './views'
 import { GetPubKeyResV1 } from './interfaces'
-import { getPublicKey } from '@utils/rsaEncrypt'
+import { getPublicKey } from '@/utils/rsa'
 import { getPubKeyStatusCodeMap } from './views'
 
 /**

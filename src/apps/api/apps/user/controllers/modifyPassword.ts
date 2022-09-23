@@ -1,6 +1,7 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import SessionInfoModel from '@/models/SessionInfo'
-import { rsaDecrypt } from '@/utils/rsaEncrypt'
+import { verifyAesSignature, aesDecryptWithTimestamp } from '@/utils/aes'
+import { rsaDecrypt } from '@/utils/rsa'
 import { HmacMD5 } from 'crypto-js'
 import { Response, NextFunction } from 'express'
 import { ModifyUserPaswdRes, ModifyUserPaswdReq, UserPasswordDoc } from '../interfaces'
@@ -13,7 +14,8 @@ const {
   PASSWORD_MODIFIED_SUCCESS,
   USER_NOT_EXIST,
   INVALID_OLD_PASSWORD,
-  INVALID_NEW_PASSWORD
+  INVALID_NEW_PASSWORD,
+  DATA_SIGNATURE_VERIFICATION_FAILED
 } = modifyPasswordStatusCodes
 
 /**
@@ -36,19 +38,47 @@ async function modifyPasswordV1 (req: SessionRequest, res: Response, next: NextF
   // 获取请求数据
   const reqData: ModifyUserPaswdReq = req.body
 
+  /* 验证数字签名 */
+
+  // 从请求头 Signature 字段获取数据签名
+  const dataSignature = req.header('Signature')
+  if (!dataSignature) {
+    const resData: ModifyUserPaswdRes = modifyPasswordView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 验证数字签名，判断数据是否被篡改
+  const verifySignatureResult = verifyAesSignature({
+    data: reqData as unknown as Record<string, unknown>,
+    signature: dataSignature,
+    aesSecretKey: req.session.clientAesKey
+  })
+  if (!verifySignatureResult) {
+    const resData: ModifyUserPaswdRes = modifyPasswordView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
   // 解密密码
-  reqData.oldPassword = rsaDecrypt(reqData.oldPassword)
-  reqData.newPassword = rsaDecrypt(reqData.newPassword)
+  const oldPassword = aesDecryptWithTimestamp(
+    reqData.oldPassword,
+    req.session.clientAesKey
+  )
+  const newPassword = aesDecryptWithTimestamp(
+    reqData.newPassword,
+    req.session.clientAesKey
+  )
 
   // 验证旧密码解密结果
-  if (!reqData.oldPassword) {
+  if (!oldPassword) {
     const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_OLD_PASSWORD)
     res.json(resData)
     return
   }
 
   // 验证新密码解密结果
-  if (!reqData.newPassword) {
+  if (!newPassword) {
     const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_NEW_PASSWORD)
     res.json(resData)
     return
@@ -73,7 +103,7 @@ async function modifyPasswordV1 (req: SessionRequest, res: Response, next: NextF
   }
 
   // 验证用户旧密码
-  const encryptedUserOldPassword: string = HmacMD5(reqData.oldPassword, secretKey).toString()
+  const encryptedUserOldPassword: string = HmacMD5(oldPassword, secretKey).toString()
   if (!userPasswordDoc.password || encryptedUserOldPassword !== userPasswordDoc.password) {
     const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_OLD_PASSWORD)
     res.json(resData)
@@ -81,7 +111,7 @@ async function modifyPasswordV1 (req: SessionRequest, res: Response, next: NextF
   }
 
   // 验证新密码有效性
-  if (!reqData.newPassword || reqData.newPassword.length < 6) {
+  if (!newPassword || newPassword.length < 6) {
     const resData: ModifyUserPaswdRes = modifyPasswordView(INVALID_NEW_PASSWORD)
     res.json(resData)
     return
@@ -90,7 +120,7 @@ async function modifyPasswordV1 (req: SessionRequest, res: Response, next: NextF
   /* 处理修改密码事件 */
 
   // MD5 单向加密新密码
-  const encryptedUserNewPassword: string = HmacMD5(reqData.newPassword, secretKey).toString()
+  const encryptedUserNewPassword: string = HmacMD5(newPassword, secretKey).toString()
 
   // 更新用户密码
   let userPasswordUpdateRes: UserPasswordDoc | null

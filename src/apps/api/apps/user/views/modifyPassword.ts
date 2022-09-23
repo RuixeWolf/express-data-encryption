@@ -5,7 +5,8 @@ export const modifyPasswordStatusCodes: Record<string, number> = {
   PASSWORD_MODIFIED_SUCCESS: 1,
   USER_NOT_EXIST: 2,
   INVALID_OLD_PASSWORD: 3,
-  INVALID_NEW_PASSWORD: 4
+  INVALID_NEW_PASSWORD: 4,
+  DATA_SIGNATURE_VERIFICATION_FAILED: 5
 }
 
 /**
@@ -46,6 +47,11 @@ export function modifyPassword (
     case 4:
       // 新密码无效
       resData.message = '新密码无效'
+      return resData
+
+    case 5:
+      // 数据签名验证失败
+      resData.message = '数据签名验证失败'
       return resData
 
     default:

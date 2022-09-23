@@ -3,7 +3,8 @@ import { UserLoginRes } from '../interfaces'
 // Exprot status codes
 export const loginStatusCodes: Record<string, number> = {
   LOGIN_SUCCESS: 1,
-  USER_NOT_EXIST_OR_INVALID_PASSWORD: 2
+  USER_NOT_EXIST_OR_INVALID_PASSWORD: 2,
+  DATA_SIGNATURE_VERIFICATION_FAILED: 3
 }
 
 /**
@@ -35,6 +36,11 @@ export function login (
     case 2:
       // 用户不存在或密码无效
       userLoginResData.message = '用户不存在或密码不正确'
+      return userLoginResData
+
+    case 3:
+      // 数据签名验证失败
+      userLoginResData.message = '数据签名验证失败'
       return userLoginResData
 
     default:

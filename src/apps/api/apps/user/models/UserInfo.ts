@@ -18,6 +18,27 @@ mongoose.connect(
   printLog(err.name, err.message, 3)
 })
 
+// User roles
+export const userRoleMap = {
+  /**
+   * Super administrator
+   * + Has all permissions
+   */
+  ADMIN: 'admin',
+  /**
+   * User administrator
+   * + Read all user information
+   * + Edit all user information
+   */
+  USER_ADMIN: 'userAdmin',
+  /**
+   * General user (Can not set this role)
+   * + Read self information
+   * + Edit self information
+   */
+  GENERAL_USER: 'generalUser'
+}
+
 // Create user information schema
 const UserInfoSchema: Schema = new Schema({
   userId: {
@@ -32,6 +53,12 @@ const UserInfoSchema: Schema = new Schema({
     type: String,
     required: true
   },
+  // TODO: 添加用户角色
+  // roles: {
+  //   type: [String],
+  //   required: true,
+  //   default: [userRoleMap.GENERAL_USER]
+  // },
   nickName: {
     type: String
   },

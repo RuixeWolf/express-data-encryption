@@ -4,7 +4,8 @@ import { AccountCancellationRes } from '../interfaces'
 export const accountCancellationStatusCodes: Record<string, number> = {
   ACCOUNT_CANCELLATION_SUCCESS: 1,
   USER_NOT_EXIST: 2,
-  INVALID_PASSWORD: 3
+  INVALID_PASSWORD: 3,
+  DATA_SIGNATURE_VERIFICATION_FAILED: 4
 }
 
 /**
@@ -42,6 +43,11 @@ export function accountCancellation (
     case 3:
       // 密码无效
       resData.message = '密码有误'
+      return resData
+
+    case 4:
+      // 数据签名验证失败
+      resData.message = '数据签名验证失败'
       return resData
 
     default:

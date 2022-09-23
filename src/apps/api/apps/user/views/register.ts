@@ -7,7 +7,8 @@ export const registerStatusCodes: Record<string, number> = {
   USER_NAME_EXIST: 3,
   INVALID_PASSWORD: 4,
   INVALID_EMAIL: 5,
-  INVALID_PHONE: 6
+  INVALID_PHONE: 6,
+  DATA_SIGNATURE_VERIFICATION_FAILED: 7
 }
 
 /**
@@ -65,6 +66,11 @@ export function register (
     case 6:
       // 手机号无效
       userRegResData.message = '手机号格式有误'
+      return userRegResData
+
+    case 7:
+      // 数据签名验证失败
+      userRegResData.message = '数据签名验证失败'
       return userRegResData
 
     default:

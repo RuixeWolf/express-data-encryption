@@ -1,6 +1,6 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
 import SessionInfoModel from '@/models/SessionInfo'
-import { rsaDecrypt } from '@/utils/rsaEncrypt'
+import { verifyAesSignature, aesDecryptWithTimestamp } from '@/utils/aes'
 import { HmacMD5 } from 'crypto-js'
 import { Response, NextFunction } from 'express'
 import { AccountCancellationRes, AccountCancellationReq, UserPasswordDoc } from '../interfaces'
@@ -16,7 +16,8 @@ import { secretKey } from '@configs/secretKey'
 const {
   ACCOUNT_CANCELLATION_SUCCESS,
   USER_NOT_EXIST,
-  INVALID_PASSWORD
+  INVALID_PASSWORD,
+  DATA_SIGNATURE_VERIFICATION_FAILED
 } = accountCancellationStatusCodes
 
 /**
@@ -39,11 +40,36 @@ async function accountCancellationV1 (req: SessionRequest, res: Response, next: 
   // 获取请求数据
   const reqData: AccountCancellationReq = req.body
 
+  /* 验证数字签名 */
+
+  // 从请求头 Signature 字段获取数据签名
+  const dataSignature = req.header('Signature')
+  if (!dataSignature) {
+    const resData: AccountCancellationRes = accountCancellationView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 验证数字签名，判断数据是否被篡改
+  const verifySignatureResult = verifyAesSignature({
+    data: reqData as unknown as Record<string, unknown>,
+    signature: dataSignature,
+    aesSecretKey: req.session.clientAesKey
+  })
+  if (!verifySignatureResult) {
+    const resData: AccountCancellationRes = accountCancellationView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
   // 解密密码
-  reqData.password = rsaDecrypt(reqData.password)
+  const userPassword = aesDecryptWithTimestamp(
+    reqData.password,
+    req.session.clientAesKey
+  )
 
   // 验证旧密码解密结果
-  if (!reqData.password) {
+  if (!userPassword) {
     const resData: AccountCancellationRes = accountCancellationView(INVALID_PASSWORD)
     res.json(resData)
     return
@@ -68,7 +94,7 @@ async function accountCancellationV1 (req: SessionRequest, res: Response, next: 
   }
 
   // 验证密码
-  const encryptedUserPassword: string = HmacMD5(reqData.password, secretKey).toString()
+  const encryptedUserPassword: string = HmacMD5(userPassword, secretKey).toString()
   if (!userPasswordDoc.password || encryptedUserPassword !== userPasswordDoc.password) {
     const resData: AccountCancellationRes = accountCancellationView(INVALID_PASSWORD)
     res.json(resData)

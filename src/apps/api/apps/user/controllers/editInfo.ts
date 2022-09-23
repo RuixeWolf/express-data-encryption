@@ -1,4 +1,5 @@
 import { SessionRequestHandler, SessionRequest } from '@/interfaces/session'
+import { verifyAesSignature } from '@/utils/aes'
 import { Response, NextFunction } from 'express'
 import { EditUserInfoRes, EditUserInfoReq, EditUserInfoFields, UserInfoDoc, EditUserInfoResData } from '../interfaces'
 import UserInfoModel from '../models/UserInfo'
@@ -9,7 +10,8 @@ const {
   EDIT_INFO_SUCCESS,
   USER_NOT_EXIST,
   INVALID_EMAIL,
-  INVALID_PHONE
+  INVALID_PHONE,
+  DATA_SIGNATURE_VERIFICATION_FAILED
 } = editInfoStatusCodes
 
 /**
@@ -31,6 +33,28 @@ async function editInfoV1 (req: SessionRequest, res: Response, next: NextFunctio
 
   // 获取需要需修改的用户信息
   const reqData: EditUserInfoReq = req.body
+
+  /* 验证数字签名 */
+
+  // 从请求头 Signature 字段获取数据签名
+  const dataSignature = req.header('Signature')
+  if (!dataSignature) {
+    const resData: EditUserInfoRes = editInfoView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
+
+  // 验证数字签名，判断数据是否被篡改
+  const verifySignatureResult = verifyAesSignature({
+    data: reqData as unknown as Record<string, unknown>,
+    signature: dataSignature,
+    aesSecretKey: req.session.clientAesKey
+  })
+  if (!verifySignatureResult) {
+    const resData: EditUserInfoRes = editInfoView(DATA_SIGNATURE_VERIFICATION_FAILED)
+    res.json(resData)
+    return
+  }
 
   /* 验证数据 */
 
