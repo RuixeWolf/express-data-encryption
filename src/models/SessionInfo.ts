@@ -32,6 +32,10 @@ const SessionInfoSchema: Schema = new Schema({
     type: String,
     required: true
   },
+  clientAesKey: {
+    type: String,
+    required: true
+  },
   createdTime: {
     type: Date,
     required: true

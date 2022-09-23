@@ -11,6 +11,7 @@ export interface SessionRequest extends Request {
   session: {
     sessionId: string
     userId: string
+    clientAesKey: string
   }
 }
 
@@ -32,6 +33,7 @@ export interface SessionInfoDoc {
   sessionId: string
   authToken: string
   userId: string
+  clientAesKey: string
   createdTime: string
   expTime: string
 }

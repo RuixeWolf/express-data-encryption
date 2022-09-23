@@ -33,6 +33,7 @@ export interface UserPasswordDoc {
 export interface UserRegisterReq {
   userName: string
   password: string
+  clientAesKey: string
   nickName?: string
   avatar?: string
   email?: string
@@ -52,6 +53,7 @@ export interface UserRegisterRes extends JsonRes {
 export interface UserLoginReq {
   user: string
   password: string
+  clientAesKey: string
 }
 
 /**

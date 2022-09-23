@@ -94,7 +94,8 @@ export function verifySession (): SessionRequestHandler {
     // 将 sessionInfo 添加至 req.session
     req.session = {
       sessionId: sessionInfo.sessionId,
-      userId: sessionInfo.userId
+      userId: sessionInfo.userId,
+      clientAesKey: sessionInfo.clientAesKey
     }
 
     // 转发请求至下一个处理器
