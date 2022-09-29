@@ -2,7 +2,7 @@
 
 ## 项目描述
 
-基于 Nodejs Express 框架，使用 TypeScript 开发的 MVC 架构后端服务，实现常用的用户操作场景所涉及的重点数据加密功能
+基于 Nodejs Express 框架，使用 TypeScript 开发的 MVC 架构后端服务，实现常用的用户操作场景所涉及的重点数据加密与签验功能
 
 ## 主要功能
 
