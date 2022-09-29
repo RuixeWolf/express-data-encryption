@@ -17,8 +17,8 @@ interface VerifyAesSignatureOptions {
 /**
  * 验证 AES 数字签名
  * @description 验证算法：通过 AES 密钥解密数字签名，获取数据 SHA256 哈希值，
- * 将现有数据 key 按照 a-z 排序，计算现有数据 SHA256 哈希值，
- * 与通过数字签名解密出来的哈希值进行对比
+ * 将现有数据 key 按照 a-z 排序，将 Record 转为 JSON 字符串，
+ * 计算字符串 SHA256 哈希值，与通过数字签名解密出来的哈希值进行对比
  * @param {VerifyAesSignatureOptions} options - 选项
  * @returns {boolean} 验证结果
  */
@@ -33,11 +33,11 @@ export function verifyAesSignature (
   if (!currentHashStr) return false
 
   // 计算现有数据的 SHA256 哈希值
-  let dataStr: string = ''
+  const record: Record<string, unknown> = {}
   Object.keys(options.data).sort().forEach(key => {
-    dataStr += options.data[key]
+    record[key] = options.data[key]
   })
-  const originalHashStr = SHA256(dataStr).toString(encHex)
+  const originalHashStr = SHA256(JSON.stringify(record)).toString(encHex)
   return currentHashStr === originalHashStr
 }
 
